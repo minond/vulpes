@@ -1,0 +1,12 @@
+{
+  "name": "vulpes",
+  "version": "0.0.0",
+  "description": "another node framework",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/minond/vulpes"
+  },
+  "dependencies": {
+    "lodash-node": "~2.4.1"
+  }
+}
