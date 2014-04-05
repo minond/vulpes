@@ -1,1 +1,7 @@
 imports: [ ./vendor/minond/scaffold/config/defbuild.yml ]
+
+aliases:
+  test:
+    - 'test:unit'
+  test:unit:
+    - 'test:unit:js'
