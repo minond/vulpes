@@ -3,7 +3,7 @@
 
     var http = require('http'),
         util = require('util'),
-        _    = require('lodash-node');
+        _    = require('lodash');
 
     /**
      * create a new application instance
