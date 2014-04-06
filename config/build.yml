@@ -1,4 +1,7 @@
 aliases:
+  ci:
+    - 'test'
+    - 'quality'
   test:
     - 'test:unit'
   test:unit:
