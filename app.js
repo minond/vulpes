@@ -3,7 +3,7 @@
 
     var server, vulpes;
 
-    vulpes = require('./vulpes/vulpes');
+    vulpes = require('./lib/vulpes');
     server = new vulpes.Server();
     server.start();
 })();

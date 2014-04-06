@@ -2,10 +2,15 @@ aliases:
   test:
     - 'test:unit'
   test:unit:
-    - 'test:unit:js'
+    - 'exec:mocha'
   quality:
   - 'prepare'
   - 'complexity:all'
   - 'htmlhint:all'
   - 'jshint:all'
   - 'jshint:report'
+
+files:
+  js:
+    dir: lib
+    all: lib/**.js
