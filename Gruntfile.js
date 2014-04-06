@@ -1,37 +1,37 @@
 /**
  * no need to edit this file. configured by config/build.yml
- * @link http://www.thomasboyt.com/2013/09/01/maintainable-grunt.html
+ * http://www.thomasboyt.com/2013/09/01/maintainable-grunt.html
  */
 module.exports = function (grunt) {
     'use strict';
 
-    var _, glob, config, tasks, task, definition;
+    var DEFAULT_CONFIG = 'vendor/minond/scaffold/config/build.yml';
+    var LOCAL_CONFIG = 'config/build.yml';
 
-    _ = require('lodash');
-    _.defaults = require('merge-defaults');
-    glob = require('glob');
-    config = grunt.file.readYAML('config/build.yml'),
-    tasks = { config: config };
+    var _ = require('lodash');
+    var glob = require('glob');
+    var defaults = require('merge-defaults');
 
-    // configs
-    _(config.imports).each(function (file) {
-        config = _.defaults(config, grunt.file.readYAML(file));
-    });
+    var tasks = {};
+    var config = tasks.config = defaults(
+        grunt.file.exists(LOCAL_CONFIG) ? grunt.file.readYAML(LOCAL_CONFIG) : {},
+        grunt.file.readYAML(DEFAULT_CONFIG)
+    );
 
     // options
+    grunt.initConfig(tasks);
     _(config.options).each(function (path) {
         glob.sync('*.js', { cwd: path }).forEach(function (option) {
-            task = option.replace(/\.js$/,'');
-            definition = require(path + option);
+            var task = option.replace(/\.js$/,'');
+            var definition = require(path + option);
+
             tasks[ task ] = _.isFunction(definition) ?
                 definition(grunt, config) : definition;
         });
     });
 
-    grunt.initConfig(tasks);
-    require('load-grunt-tasks')(grunt);
-
     // tasks
+    require('load-grunt-tasks')(grunt);
     _(config.aliases).forOwn(function (tasks, alias) {
         grunt.registerTask(alias, tasks);
     });

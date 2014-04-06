@@ -1,5 +1,3 @@
-imports: [ ./vendor/minond/scaffold/config/defbuild.yml ]
-
 aliases:
   test:
     - 'test:unit'
