@@ -5,7 +5,7 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var _, glob, config, tasks, task;
+    var _, glob, config, tasks, task, definition;
 
     _ = require('lodash');
     _.defaults = require('merge-defaults');
@@ -22,7 +22,9 @@ module.exports = function (grunt) {
     _(config.options).each(function (path) {
         glob.sync('*.js', { cwd: path }).forEach(function (option) {
             task = option.replace(/\.js$/,'');
-            tasks[ task ] = require(path + option);
+            definition = require(path + option);
+            tasks[ task ] = _.isFunction(definition) ?
+                definition(grunt, config) : definition;
         });
     });
 

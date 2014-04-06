@@ -5,3 +5,9 @@ aliases:
     - 'test:unit'
   test:unit:
     - 'test:unit:js'
+  quality:
+  - 'prepare'
+  - 'complexity:all'
+  - 'htmlhint:all'
+  - 'jshint:all'
+  - 'jshint:report'

@@ -26,6 +26,8 @@
     "phantomjs": "~1.9.7-1",
     "load-grunt-tasks": "~0.4.0",
     "glob": "~3.2.9",
-    "merge-defaults": "~0.1.0"
+    "merge-defaults": "~0.1.0",
+    "grunt-htmlhint": "~0.4.0",
+    "json5": "~0.2.0"
   }
 }
