@@ -7,11 +7,14 @@ aliases:
   test:unit:
     - 'exec:mocha'
   quality:
-  - 'prepare'
-  - 'complexity:all'
-  - 'htmlhint:all'
-  - 'jshint:all'
-  - 'jshint:report'
+    - 'prepare'
+    - 'complexity:all'
+    - 'htmlhint:all'
+    - 'jshint:all'
+    - 'jshint:report'
+  documentation:
+    - 'yuidoc:all'
+    - 'apidoc:all'
 
 files:
   js:

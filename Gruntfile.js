@@ -13,10 +13,13 @@ module.exports = function (grunt) {
     var defaults = require('merge-defaults');
 
     var tasks = {};
-    var config = tasks.config = defaults(
+    var config = defaults(
         grunt.file.exists(LOCAL_CONFIG) ? grunt.file.readYAML(LOCAL_CONFIG) : {},
         grunt.file.readYAML(DEFAULT_CONFIG)
     );
+
+    tasks.config = config;
+    tasks.pkg = grunt.file.readJSON('package.json');
 
     // options
     grunt.initConfig(tasks);
