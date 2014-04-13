@@ -17,6 +17,12 @@ describe('not found error', function(){
             expect(error).to.be.a(BaseError);
             expect(error).to.be.a(NotFoundError);
         });
+
+        it('does not break parents prototype', function () {
+            expect(new Error()).not.to.be.a(BaseError);
+            expect(new Error()).not.to.be.a(NotFoundError);
+            expect(new BaseError()).not.to.be.a(NotFoundError);
+        });
     });
 
     describe('construction parameters', function () {

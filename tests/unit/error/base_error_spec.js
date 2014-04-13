@@ -15,6 +15,10 @@ describe('base error', function(){
             expect(error).to.be.a(Error);
             expect(error).to.be.a(BaseError);
         });
+
+        it('does not break parents prototype', function () {
+            expect(new Error()).not.to.be.a(BaseError);
+        });
     });
 
     describe('construction parameters', function () {
