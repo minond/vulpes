@@ -16,6 +16,7 @@ aliases:
     - 'htmlhint:all'
     - 'jshint:all'
     - 'jshint:report'
+    - 'spell'
   documentation:
     - 'yuidoc:all'
     - 'apidoc:all'
