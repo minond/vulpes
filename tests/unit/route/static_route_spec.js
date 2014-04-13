@@ -13,8 +13,8 @@ describe('controller route', function(){
 
     describe('loading module', function () {
         it('allows the instanciation of a new route object', function () {
-            expect(route instanceof BaseRoute).to.be(true);
-            expect(route instanceof StaticRoute).to.be(true);
+            expect(route).to.be.a(BaseRoute);
+            expect(route).to.be.a(StaticRoute);
         });
     });
 

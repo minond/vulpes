@@ -12,7 +12,7 @@ describe('base route', function(){
 
     describe('loading module', function () {
         it('allows the instanciation of a new route object', function () {
-            expect(route instanceof BaseRoute).to.be(true);
+            expect(route).to.be.a(BaseRoute);
         });
     });
 
@@ -66,6 +66,14 @@ describe('base route', function(){
             };
 
             expect(route.handles(req)).to.be(false);
+        });
+    });
+
+    describe('route handler', function () {
+        it('should not route anything', function () {
+            expect(route.route).to.throwError(function (e) {
+                expect(e).to.be.a(Error);
+            });
         });
     });
 });
