@@ -1,4 +1,4 @@
-describe('controller route', function(){
+describe('static route', function(){
     'use strict';
 
     var expect, BaseRoute, StaticRoute, route, vulpes;

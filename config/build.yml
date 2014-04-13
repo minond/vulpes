@@ -23,4 +23,4 @@ aliases:
 files:
   js:
     dir: lib
-    all: lib/**.js
+    all: lib/**/**.js
