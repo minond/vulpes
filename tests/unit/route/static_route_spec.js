@@ -1,9 +1,10 @@
 describe('static route', function(){
     'use strict';
 
-    var expect, BaseRoute, StaticRoute, route, vulpes, req;
+    var expect, BaseRoute, StaticRoute, route, vulpes, req, res;
 
     beforeEach(function () {
+        res = {};
         expect = require('expect.js');
         vulpes = require('../../../lib/vulpes');
         BaseRoute = vulpes.route.BaseRoute;
@@ -40,7 +41,7 @@ describe('static route', function(){
     });
 
     describe('route handler', function () {
-        it('throws error when file is not found', function () {
+        it('triggers error when file is not found', function (done) {
             req = {
                 url: '/public/does not exist'
             };
@@ -50,9 +51,9 @@ describe('static route', function(){
                 dir: './public'
             });
 
-            expect(route.route.bind(route)).withArgs(req).to.throwError(function (e) {
-                console.log(e.message);
-                expect(e).to.be.a(vulpes.error.NotFoundError);
+            route.route(req, res, function (err) {
+                expect(err).to.be.a(vulpes.error.NotFoundError);
+                done();
             });
         });
     });
