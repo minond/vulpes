@@ -71,9 +71,9 @@ describe('base route', function(){
 
     describe('route handler', function () {
         it('should not route anything', function () {
-            expect(route.route.bind(route)).to.throwError(function (e) {
-                expect(e).to.be.a(Error);
-                expect(e.message).to.be('vulpes.BaseRoute does not route');
+            route.route({}, {}, function (err) {
+                expect(err).to.be.a(Error);
+                expect(err.message).to.be('vulpes.BaseRoute does not route');
             });
         });
     });
