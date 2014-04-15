@@ -1,0 +1,46 @@
+#!/bin/bash
+
+cmd=$1
+
+case "$cmd" in
+    app)
+        app=$2
+
+        echo "creating $app"
+        mkdir $app
+        cd $app
+
+        echo "creating directory structure"
+
+        # app
+        mkdir -p app/controllers
+        mkdir -p app/config
+
+        # public
+        mkdir -p public/views
+        mkdir -p public/resources/js
+        mkdir -p public/resources/css
+
+        echo "installing vulpes"
+        touch package.json
+        cat > package.json << EOF
+{
+  "name": "$app",
+  "version": "0.0.0",
+  "dependencies": {
+  }
+}
+EOF
+        npm install https://github.com/minond/vulpes/tarball/master --save &> /dev/null
+
+        ;;
+
+    start)
+        NODE_PATH=`pwd`/node_modules/ node node_modules/vulpes/scripts/server.js
+        ;;
+
+    *)
+        echo 'invalid commmand';
+        exit 1
+        ;;
+esac
