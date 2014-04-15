@@ -1,29 +1,67 @@
 #!/bin/bash
 
+#==============================================================================
+#         FILE: vulpes
+#        USAGE: see usage function
+#==============================================================================
 cmd=$1
 
-case "$cmd" in
-    app)
-        app=$2
+#=== FUNCTION =================================================================
+#        NAME: usage
+#==============================================================================
+usage() {
+    echo 'usage: vulpes <command> [<args>]'
+    echo
+    echo 'commands:'
+    echo '  app     # create a new application'
+    echo '  start   # start an application server'
+}
 
-        echo "creating $app"
-        mkdir $app
-        cd $app
+#=== FUNCTION =================================================================
+#        NAME: cmd_start
+# DESCRIPTION: starts a vulpes app
+#==============================================================================
+cmd_start() {
+    if [ -f node_modules/vulpes/scripts/server.js ]; then
+        NODE_PATH=`pwd`/node_modules/ node node_modules/vulpes/scripts/server.js
+    else
+        echo "does not appear to be a vulpes app."
+        echo "if it is, did you run npm install?"
+        exit 1
+    fi
+}
 
-        echo "creating directory structure"
+#=== FUNCTION =================================================================
+#        NAME: cmd_app
+# DESCRIPTION: creates a new vulpes application
+# PARAMETER 1: app
+#==============================================================================
+cmd_app() {
+    app=$1
 
-        # app
-        mkdir -p app/controllers
-        mkdir -p app/config
+    if [ -d $app ]; then
+        echo "$app already exists"
+        exit 1
+    fi
 
-        # public
-        mkdir -p public/views
-        mkdir -p public/resources/js
-        mkdir -p public/resources/css
+    echo "creating $app"
+    mkdir $app
+    cd $app
 
-        echo "installing vulpes"
-        touch package.json
-        cat > package.json << EOF
+    echo "creating directory structure"
+
+    # app
+    mkdir -p app/controllers
+    mkdir -p app/config
+
+    # public
+    mkdir -p public/views
+    mkdir -p public/resources/js
+    mkdir -p public/resources/css
+
+    echo "installing vulpes"
+    touch package.json
+    cat > package.json << EOF
 {
   "name": "$app",
   "version": "0.0.0",
@@ -31,16 +69,13 @@ case "$cmd" in
   }
 }
 EOF
-        npm install https://github.com/minond/vulpes/tarball/master --save &> /dev/null
 
-        ;;
+    npm install https://github.com/minond/vulpes/tarball/master --save &> /dev/null
+}
 
-    start)
-        NODE_PATH=`pwd`/node_modules/ node node_modules/vulpes/scripts/server.js
-        ;;
-
-    *)
-        echo 'invalid commmand';
-        exit 1
-        ;;
+case "$cmd" in
+    app) cmd_app $2 ;;
+    start) cmd_start ;;
+    -h) usage ;;
+    *|-h) usage; exit 1 ;;
 esac
