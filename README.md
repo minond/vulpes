@@ -12,3 +12,11 @@ sudo npm install https://github.com/minond/vulpes/tarball/master -g
 # local install
 npm install https://github.com/minond/vulpes/tarball/master --save
 ```
+
+## getting started
+```bash
+# create a new app and run it
+vulpes create myapp
+cd myapp
+vulpes start
+```
