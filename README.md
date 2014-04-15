@@ -3,3 +3,12 @@
 
 ## what?
 another node framework
+
+## installation
+```bash
+# global install
+sudo npm update https://github.com/minond/vulpes/tarball/master -g
+
+# local install
+npm install https://github.com/minond/vulpes/tarball/master --save
+```
