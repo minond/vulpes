@@ -13,7 +13,7 @@ usage() {
     echo 'usage: vulpes <command> [<args>]'
     echo
     echo 'commands:'
-    echo '  app     # create a new application'
+    echo '  create  # create a new application'
     echo '  start   # start an application server'
 }
 
@@ -32,11 +32,11 @@ cmd_start() {
 }
 
 #=== FUNCTION =================================================================
-#        NAME: cmd_app
+#        NAME: cmd_create
 # DESCRIPTION: creates a new vulpes application
 # PARAMETER 1: app
 #==============================================================================
-cmd_app() {
+cmd_create() {
     app=$1
 
     if [ -d $app ]; then
@@ -44,22 +44,29 @@ cmd_app() {
         exit 1
     fi
 
-    echo "creating $app"
+    echo "=> creating $app"
     mkdir $app
     cd $app
 
-    echo "creating directory structure"
+    echo "=> creating directory structure"
 
     # app
-    mkdir -p app/controllers
-    mkdir -p app/config
+    mkdir app
+    mkdir app/controllers
+
+    mkdir config
+    cat > config/routes.yml << EOF
+/public/(.+):
+  dir: ./public
+EOF
+
 
     # public
     mkdir -p public/views
     mkdir -p public/resources/js
     mkdir -p public/resources/css
 
-    echo "installing vulpes"
+    echo -n "=> installing vulpes"
     touch package.json
     cat > package.json << EOF
 {
@@ -71,10 +78,11 @@ cmd_app() {
 EOF
 
     npm install https://github.com/minond/vulpes/tarball/master --save &> /dev/null
+    echo
 }
 
 case "$cmd" in
-    app) cmd_app $2 ;;
+    create) cmd_create $2 ;;
     start) cmd_start ;;
     -h) usage ;;
     *|-h) usage; exit 1 ;;
