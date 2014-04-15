@@ -89,6 +89,10 @@ EOF
     mkdir -p public/resources/js
     mkdir -p public/resources/css
 
+    touch public/views/.gitkeep
+    touch public/resources/js/.gitkeep
+    touch public/resources/css/.gitkeep
+
     mkdir -p tests/unit/backend/controllers
     cat > tests/unit/backend/controllers/home_test.js << EOF
 describe('home controller', function () {
