@@ -10,7 +10,10 @@
   "dependencies": {
     "lodash": "~2.4.1",
     "node-static": "~0.7.3",
-    "cli-color": "~0.2.3"
+    "cli-color": "~0.2.3",
+    "js-yaml": "~3.0.2",
+    "install": "~0.1.7",
+    "npm": "~1.4.6"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
