@@ -1,25 +1,4 @@
-aliases:
-  ci:
-    - 'clean'
-    - 'prepare'
-    - 'quality'
-    - 'test'
-  default:
-    - 'ci'
-  test:
-    - 'test:unit'
-  test:unit:
-    - 'exec:mocha'
-  quality:
-    - 'prepare'
-    - 'complexity:all'
-    - 'htmlhint:all'
-    - 'jshint:all'
-    - 'jshint:report'
-    - 'spell'
-  documentation:
-    - 'yuidoc:all'
-    - 'apidoc:all'
+type: js
 
 files:
   js:

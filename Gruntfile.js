@@ -6,6 +6,7 @@ module.exports = function (grunt) {
     'use strict';
 
     var DEFAULT_CONFIG = 'vendor/minond/scaffold/config/build.yml';
+    var DEFAULT_JS_CONFIG = 'vendor/minond/scaffold/config/build-js.yml';
     var LOCAL_CONFIG = 'config/build.yml';
 
     var _ = require('lodash');
@@ -17,6 +18,13 @@ module.exports = function (grunt) {
         grunt.file.exists(LOCAL_CONFIG) ? grunt.file.readYAML(LOCAL_CONFIG) : {},
         grunt.file.readYAML(DEFAULT_CONFIG)
     );
+
+    // standard type templates
+    switch (config.type) {
+        case 'js':
+            config = defaults(grunt.file.readYAML(DEFAULT_JS_CONFIG), config);
+            break;
+    }
 
     tasks.config = config;
     tasks.pkg = grunt.file.readJSON('package.json');
