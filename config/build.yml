@@ -4,3 +4,7 @@ files:
   js:
     dir: lib
     all: lib/**/**.js
+  tests:
+    js:
+      backend_unit_dir: tests/unit
+      all: tests/unit/**/*.js
