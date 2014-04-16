@@ -3,7 +3,7 @@ describe('injector module', function () {
 
     // copied from https://github.com/minond/DI/blob/master/tests/DI_test.js
 
-    var expect, vulpes, di, Injector, func, difunc;
+    var expect, vulpes, di, Injector, args, func, difunc;
 
     beforeEach(function () {
         expect = require('expect.js');
@@ -59,6 +59,49 @@ describe('injector module', function () {
         });
     });
 
+    describe('argument list generator', function () {
+        it('non di args are not ignored', function () {
+            args = di.generate_argument_list(['one', 'two'], [1, 2]);
+            expect(args).to.eql([1, 2]);
+        });
+
+        it('extra arguments are not ignored', function () {
+            args = di.generate_argument_list(['one', 'two'], [1, 2, 3, 4]);
+            expect(args).to.eql([1, 2]);
+        });
+
+        it('di arguments are included', function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['one'], []);
+            expect(args).to.eql([1]);
+        });
+
+        it('di arguments are not overwritten', function () {
+            di.dependency('one', 1);
+            args = di.generate_argument_list(['one'], [2]);
+            expect(args).to.eql([1]);
+        });
+
+        it('di arguments can be mixed with regular arguments, manual middle', function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            args = di.generate_argument_list(['one', 'three', 'two'], [3]);
+            expect(args).to.eql([1, 3, 2]);
+        });
+
+        it('multiple di arguments', function () {
+            di.dependency('one', 1);
+            di.dependency('two', 2);
+            args = di.generate_argument_list(['one', 'two'], []);
+            expect(args).to.eql([1, 2]);
+        });
+
+        it('passing no arguments acts the same', function () {
+            args = di.generate_argument_list(['one', 'two'], []);
+            expect(args).to.eql([null, null]);
+        });
+    });
+
     describe('bound functions', function () {
         it('valueOf returns the same', function () {
             func = function (num) {
@@ -80,10 +123,7 @@ describe('injector module', function () {
         });
 
         it('return value is the same', function () {
-            var num;
-
-            func = function (numxxx) {
-                numxxx = num;
+            func = function (num) {
                 return num;
             };
 
