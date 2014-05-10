@@ -14,7 +14,7 @@ usage() {
     echo
     echo 'commands:'
     echo '  create  # create a new application'
-    echo '  start   # start an application server'
+    echo '  start   # start an application web-app server'
 }
 
 #=== FUNCTION =================================================================
@@ -22,8 +22,8 @@ usage() {
 # DESCRIPTION: starts a vulpes app
 #==============================================================================
 cmd_start() {
-    if [ -f node_modules/vulpes/scripts/server.js ]; then
-        NODE_PATH=`pwd`/node_modules/ node node_modules/vulpes/scripts/server.js
+    if [ -f node_modules/vulpes/scripts/www.js ]; then
+        NODE_PATH=`pwd`/node_modules/ node node_modules/vulpes/scripts/www.js
     else
         echo "does not appear to be a vulpes app."
         echo "if it is, did you run npm install?"
