@@ -16,7 +16,7 @@ log.info('starting vulpes application');
 
 // load app routes
 log.info('loading routes');
-routes = yaml.safeLoad(fs.readFileSync(vulpes.std.path.routes, 'utf8'));
+routes = yaml.safeLoad(fs.readFileSync(vulpes.internal.path.routes, 'utf8'));
 _(routes).each(function (info, url) {
     var route;
 
