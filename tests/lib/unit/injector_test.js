@@ -12,7 +12,9 @@ describe('injector module', function () {
         injector = new Injector();
     });
 
-    it('should be an instance of Injector', function () {
+    it('should exist', function () {
+        expect(Injector).to.not.be(undefined);
+        expect(Injector).to.be.a('function');
         expect(injector instanceof Injector).to.be(true);
     });
 

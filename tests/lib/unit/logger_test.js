@@ -24,6 +24,11 @@ describe('logger module', function () {
         log = logger('test');
     });
 
+    it('should exist', function () {
+        expect(logger).to.not.be(undefined);
+        expect(logger).to.be.a('function');
+    });
+
     describe('log return value', function () {
         it('should be a function', function () {
             expect(log).to.be.a('function');
