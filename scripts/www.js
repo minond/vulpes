@@ -1,23 +1,32 @@
 'use strict';
 
-var vulpes, server, router, routes, fs, yaml, log, _;
+var vulpes, server, router, routes, fs, yaml, log, lodash;
 
 vulpes = require('vulpes');
 yaml = require('js-yaml');
 fs = require('fs');
-_ = require('lodash');
+lodash = require('lodash');
+cli = require('cli-color');
 
 router = new vulpes.Router();
 server = new vulpes.Server();
 
 log = vulpes.logger('init');
-log.art.fox(log);
+cli.xterm(232)('                        ');
+cli.xterm(254)('     /\\                ');
+cli.xterm(222)('    (~(                 ');
+cli.xterm(222)('     ) )     /\\_/\\    ');
+cli.xterm(222)('    ( _-----_(- -)      ');
+cli.xterm(222)('      (       \\ /      ');
+cli.xterm(222)('      /|/--\\|\\ V      ');
+cli.xterm(244)('      " "   " "         ');
+cli.xterm(232)('                        ');
 log.info('starting vulpes application');
 
 // load app routes
 log.info('loading routes');
 routes = yaml.safeLoad(fs.readFileSync(vulpes.internal.path.routes, 'utf8'));
-_(routes).each(function (info, url) {
+loading(routes).each(function (info, url) {
     var route;
 
     switch (true) {
