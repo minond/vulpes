@@ -59,6 +59,12 @@ describe('injector module', function () {
                 'one', 'two'
             ]);
         });
+
+        it('recognizes functions with no arguments', function () {
+            expect(Injector.get_function_arguments(function () {
+                console.log(arguments);
+            })).to.eql([]);
+        });
     });
 
     describe('argument list generator', function () {
