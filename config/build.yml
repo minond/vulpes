@@ -6,5 +6,5 @@ files:
     all: lib/**/**.js
   tests:
     js:
-      backend_unit_dir: tests/lib
+      backend_unit_dir: tests/lib/**
       all: tests/lib/**/*_test.js
