@@ -1,12 +1,10 @@
 'use strict';
 
-describe('injector module', function () {
+describe('Injector', function () {
     var injector, args, func, ifunc;
 
     var expect = require('expect.js'),
-        vulpes = require('../../../lib');
-
-    var Injector = vulpes.Injector;
+        Injector = require('../../../lib/injector');
 
     beforeEach(function () {
         injector = new Injector();
@@ -63,6 +61,14 @@ describe('injector module', function () {
         it('recognizes functions with no arguments', function () {
             expect(Injector.get_function_arguments(function () {
                 console.log(arguments);
+            })).to.eql([]);
+        });
+
+        it('handles no matches', function () {
+            expect(Injector.get_function_arguments({
+                toString: function () {
+                    return 'function {}';
+                }
             })).to.eql([]);
         });
     });

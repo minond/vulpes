@@ -2,21 +2,4 @@
 [![Build Status](https://travis-ci.org/minond/vulpes.svg?branch=master)](https://travis-ci.org/minond/vulpes)
 
 ## what?
-another node framework
-
-## installation
-```bash
-# global install
-sudo npm install https://github.com/minond/vulpes/tarball/master -g
-
-# local install
-npm install https://github.com/minond/vulpes/tarball/master --save
-```
-
-## getting started
-```bash
-# create a new app and run it
-vulpes create myapp
-cd myapp
-vulpes start
-```
+`vulpes` is a combination of some of my opinions and a lot of node modules made into a webapp bootstrapping tool
