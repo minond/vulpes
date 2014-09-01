@@ -5,8 +5,9 @@
 var program = require('commander'),
     color = require('cli-color'),
     env = require('node-env-file'),
-    pkg = require('./../package.json'),
-    fs = require('fs'),
+    fs = require('fs');
+
+var pkg = require('./../package.json'),
     cwd = process.cwd();
 
 if (fs.existsSync(cwd + '/.env')) {
