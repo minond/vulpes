@@ -13,9 +13,6 @@ var app = express(),
     cwd = process.cwd(),
     log = debug('vulpes:server');
 
-var Injector = require('argument-injector'),
-    injector = new Injector();
-
 app.use(body.urlencoded({ extended: false }));
 app.use(body.json());
 app.use('/lib', express.static(cwd + '/lib/'));
