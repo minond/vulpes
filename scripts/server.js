@@ -33,7 +33,13 @@ if (fs.existsSync(cwd + '/config/bootup.js')) {
     require(cwd + '/config/bootup.js')(app, injector);
 }
 
-app.get('/*', function (req, res) {
+lodash.each(yaml.safeLoad(fs.readFileSync(cwd + '/config/routes.yml', 'utf8')).routes, function (route, url) {
+    var controller = require(cwd + '/app/' + route.controller + '.js');
+    app[ route.method || 'get' ](url, controller[ route.action || 'index' ]);
+});
+
+app.get('/*', function (req, res, next) {
+    if (req.url === '/favicon.ico') next();
     res.render(req.url.replace(/^\//, '') + '.html');
 });
 
