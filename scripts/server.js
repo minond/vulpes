@@ -11,7 +11,7 @@ var express = require('express'),
     body = require('body-parser'),
     swig = require('swig');
 
-var lodash = require('lodash'),
+var _ = require('lodash'),
     yaml = require('yamljs'),
     fs = require('fs');
 
@@ -40,12 +40,13 @@ if (fs.existsSync(cwd + '/config/bootup.js')) {
 }
 
 // application routes
-var routes = builder.routes(yaml.load(cwd + '/config/routes.yml').routes);
-
-lodash.each(routes, function (route) {
-    var controller = require(route.controller);
-    app[ route.method ](route.url, injector.bind(controller[ route.action ]));
-});
+_.each(
+    builder.routes(yaml.load(cwd + '/config/routes.yml').routes),
+    function (route) {
+        var controller = require(route.controller);
+        app[ route.method ](route.url, injector.bind(controller[ route.action ]));
+    }
+);
 
 // static resource routes
 app.get('/*', function (req, res, next) {
