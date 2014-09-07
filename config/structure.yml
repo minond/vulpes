@@ -1,0 +1,3 @@
+structure:
+  server:
+    controllers: <%= cwd %>/app/controllers/<%= name %>.js

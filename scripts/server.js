@@ -1,17 +1,23 @@
 'use strict';
 
+var Builder = require('../src/builder'),
+    builder = new Builder();
+
+var Injector = require('argument-injector'),
+    injector = new Injector();
+
 var express = require('express'),
-    debug = require('debug'),
-    lodash = require('lodash'),
     index = require('serve-index'),
     body = require('body-parser'),
-    yaml = require('js-yaml'),
-    swig = require('swig'),
+    swig = require('swig');
+
+var lodash = require('lodash'),
+    yaml = require('yamljs'),
     fs = require('fs');
 
 var app = express(),
     cwd = process.cwd(),
-    log = debug('vulpes:server');
+    log = require('debug')('vulpes:server');
 
 app.use(body.urlencoded({ extended: false }));
 app.use(body.json());
@@ -33,14 +39,20 @@ if (fs.existsSync(cwd + '/config/bootup.js')) {
     require(cwd + '/config/bootup.js')(app, injector);
 }
 
-lodash.each(yaml.safeLoad(fs.readFileSync(cwd + '/config/routes.yml', 'utf8')).routes, function (route, url) {
-    var controller = require(cwd + '/app/' + route.controller + '.js');
-    app[ route.method || 'get' ](url, controller[ route.action || 'index' ]);
+// application routes
+var routes = builder.routes(yaml.load(cwd + '/config/routes.yml').routes);
+
+lodash.each(routes, function (route) {
+    var controller = require(route.controller);
+    app[ route.method ](route.url, injector.bind(controller[ route.action ]));
 });
 
+// static resource routes
 app.get('/*', function (req, res, next) {
-    if (req.url === '/favicon.ico') next();
+    if (req.url === '/favicon.ico') {
+        next();
+    }
     res.render(req.url.replace(/^\//, '') + '.html');
 });
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 5000);

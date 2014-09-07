@@ -1,7 +1,10 @@
 var DEFAULT_CONFIG = 'vendor/minond/scaffold/config/build.yml',
-    DEFAULT_JS_CONFIG = 'vendor/minond/scaffold/config/build-js.yml',
     LOCAL_CONFIG = 'config/build.yml';
 
+/**
+ * no need to edit this file. configured by config/build.yml
+ * http://www.thomasboyt.com/2013/09/01/maintainable-grunt.html
+ */
 module.exports = function (grunt) {
     'use strict';
 
@@ -9,18 +12,16 @@ module.exports = function (grunt) {
         glob = require('glob'),
         defaults = require('merge-defaults');
 
-    var config, tasks = {};
-
-    config = defaults(
+    var tasks = {}, config = defaults(
         grunt.file.exists(LOCAL_CONFIG) ? grunt.file.readYAML(LOCAL_CONFIG) : {},
         grunt.file.readYAML(DEFAULT_CONFIG)
     );
 
-    // standard type templates
-    switch (config.type) {
-        case 'js':
-            config = defaults(grunt.file.readYAML(DEFAULT_JS_CONFIG), config);
-            break;
+    // pre-built templates
+    if (config.type) {
+        config = defaults(grunt.file.readYAML(
+            'vendor/minond/scaffold/config/types/build-' + config.type + '.yml'
+        ), config);
     }
 
     tasks.config = config;
