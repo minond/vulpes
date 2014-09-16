@@ -1,59 +1,77 @@
 'use strict';
 
-var Builder = require('../src/builder'),
-    builder = new Builder();
+var builder, build, config;
 
-var Injector = require('argument-injector'),
-    injector = new Injector();
+var Configuration = require('acm'),
+    Builder = require('../src/builder');
 
-var express = require('express'),
-    index = require('serve-index'),
-    body = require('body-parser'),
-    swig = require('swig');
+var app = require('express')(),
+    log = require('debug')('vulpes:server'),
+    path = require('path'),
+    cwd = process.cwd();
 
-var _ = require('lodash'),
-    yaml = require('yamljs'),
-    fs = require('fs');
-
-var app = express(),
-    cwd = process.cwd(),
-    log = require('debug')('vulpes:server');
-
-app.use(body.urlencoded({ extended: false }));
-app.use(body.json());
-app.use('/lib', express.static(cwd + '/lib/'));
-app.use('/assets', express.static(cwd + '/assets/'));
-app.set('view engine', 'html');
-app.set('views', cwd + '/assets/views/');
-app.engine('html', swig.renderFile);
-
-if (process.env.NODE_ENV === 'development') {
-    app.use('/lib', index(cwd + '/lib/', { icons: true }));
-    app.use('/assets', index(cwd + '/assets/', { icons: true }));
-    app.set('view cache', false);
-    swig.setDefaults({ cache: false });
-}
-
-if (fs.existsSync(cwd + '/config/bootup.js')) {
-    log('loading application bootup file');
-    require(cwd + '/config/bootup.js')(app, injector);
-}
-
-// application routes
-_.each(
-    builder.routes(yaml.load(cwd + '/config/routes.yml').routes),
-    function (route) {
-        var controller = require(route.controller);
-        app[ route.method ](route.url, injector.bind(controller[ route.action ]));
-    }
-);
-
-// static resource routes
-app.get('/*', function (req, res, next) {
-    if (req.url === '/favicon.ico') {
-        next();
-    }
-    res.render(req.url.replace(/^\//, '') + '.html');
+config = new Configuration({
+    paths: [
+        path.join(cwd, 'config'),
+        path.join(__dirname, '..', 'config'),
+    ]
 });
 
+config.fields.cwd = cwd;
+builder = new Builder(config);
+build = builder.build();
+
+// should not require any middle ware
+build.routes.static.forEach(function (route) {
+    log('static route %s (%s)', route.url, route.dir);
+    app.use(route.url, require('serve-static')(route.dir));
+});
+
+app.use(require('body-parser').urlencoded({ extended: false }));
+app.use(require('body-parser').json());
+app.use(require('cookie-parser')(/* secret */));
+
+app.set('view engine', 'html');
+app.set('views', cwd + '/assets/views/');
+app.engine('html', require('swig').renderFile);
+
+// application routes
+build.routes.dynamic.forEach(function (route) {
+    log('dynamic route %s (%s#%s)', route.url, route.controller_name, route.action);
+    var controller = require(route.controller);
+    app[ route.method ](route.url, controller[ route.action ]);
+});
+
+if (process.env.NODE_ENV === 'development') {
+    log('detected development enviroment');
+    require('swig').setDefaults({ cache: false });
+    require('errorhandler').title = 'Vulpes';
+
+    build.routes.static.forEach(function (route) {
+        log('serving index %s (%s)', route.url, route.dir);
+        app.use(route.url, require('serve-index')(route.dir));
+    });
+
+    app.set('view cache', false);
+    app.use(require('errorhandler')());
+}
+
+app.get('*', (function viewsServerMount(config) {
+    return function viewsServerHandler(req, res, next) {
+        var file = req.url.substr(1);
+
+        if (file === 'favicon.ico') {
+            next();
+        }
+
+        res.render(file, function (err, html) {
+            if (err) {
+                res.status(404)
+                    .render(config[404] || 404);
+            } else {
+                res.send(html);
+            }
+        });
+    };
+})());
 app.listen(process.env.PORT || 5000);

@@ -1,34 +1,27 @@
 'use strict';
 
-var _ = require('lodash'),
-    yaml = require('yamljs');
-
-/**
- * @function merge
- */
-var merge = _.partialRight(_.merge, function deep(value, other) {
-    return _.merge(value, other, deep);
-});
-
-/**
- * all of vulpe's default configuration
- * @type {Object}
- */
-var default_config = merge(
-    yaml.load(__dirname + '/../config/structure.yml'),
-    yaml.load(__dirname + '/../config/controllers.yml')
-);
+var format = require('util').format,
+    map = require('lodash-node/modern/collections/map');
 
 /**
  * a vulpes app runtime builder
  * @class Builder
- * @param {Object} config
- * @param {String} cwd
+ * @param {acm} config
  */
-function Builder(config, cwd) {
-    this.cwd = cwd || process.cwd();
-    this.config = merge(default_config, config);
+function Builder(config) {
+    this.$config = config;
 }
+
+/**
+ * combines all parts of the build into a single object
+ * @method build
+ * @return {Object}
+ */
+Builder.prototype.build = function () {
+    return {
+        routes: this.routes()
+    };
+};
 
 /**
  * takes an object representation of the application's routes and returns an
@@ -37,20 +30,23 @@ function Builder(config, cwd) {
  * @return {Array}
  */
 Builder.prototype.routes = function (routes) {
-    var config = this.config,
-        cwd = this.cwd;
-
-    return _.map(routes, function (route, url) {
-        return {
-            url: url,
-            method: route.method || config.controllers.defaults.method,
-            action: route.action || config.controllers.defaults.action,
-            controller: _.template(config.structure.server.controllers, {
-                cwd: cwd,
-                name: route.controller
-            })
-        };
-    });
+    return {
+        static: map(this.$config.get('routes.static'), function (dir, url) {
+            return {
+                url: url,
+                dir: dir
+            };
+        }),
+        dynamic: map(this.$config.get('routes.routes'), function (route, url) {
+            return {
+                url: url,
+                method: route.method || this.$config.get('controllers.controllers.defaults.method'),
+                action: route.action || this.$config.get('controllers.controllers.defaults.action'),
+                controller: format(this.$config.get('structure.structure.server.controllers'), route.controller),
+                controller_name: route.controller
+            };
+        }, this)
+    };
 };
 
 module.exports = Builder;
