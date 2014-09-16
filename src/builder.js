@@ -26,10 +26,9 @@ Builder.prototype.build = function () {
 /**
  * takes an object representation of the application's routes and returns an
  * list of urls and their handler methods
- * @param {Object} routes
  * @return {Array}
  */
-Builder.prototype.routes = function (routes) {
+Builder.prototype.routes = function () {
     return {
         static: map(this.$config.get('routes.static'), function (dir, url) {
             return {
