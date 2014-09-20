@@ -56,19 +56,40 @@ if (process.env.NODE_ENV === 'development') {
     app.use(require('errorhandler')());
 }
 
-app.get('*', (function viewsServerMount(config) {
-    return function viewsServerHandler(req, res, next) {
+app.get('*', (function serveViewsMount() {
+    var log = require('debug')('serveviews');
+
+    return function serveViewsHanlder(req, res, next) {
         var file = req.url.substr(1);
 
-        if (file === 'favicon.ico') {
+        if (!file || file === 'favicon.ico') {
             next();
+            return;
         }
 
+        log('handling request for %s', file);
         res.render(file, function (err, html) {
             if (err) {
-                res.status(404)
-                    .render(config[404] || 404);
+                next();
             } else {
+                log('serving %s', file);
+                res.send(html);
+            }
+        });
+    };
+})());
+
+app.get('*', (function notFoundMount() {
+    var log = require('debug')('notfound');
+
+    return function notFoundHandler(req, res, next) {
+
+        log('404\'ing request to %s', req.url);
+        res.render(404, function (err, html) {
+            if (err) {
+                next();
+            } else {
+                res.status(404);
                 res.send(html);
             }
         });
