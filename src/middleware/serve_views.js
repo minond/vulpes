@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('debug')('serveviews');
+var log = require('debug')('serve_views');
 
 module.exports = function serve_views(req, res, next) {
     var file = req.url.substr(1);

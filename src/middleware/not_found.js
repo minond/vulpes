@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('debug')('notfound');
+var log = require('debug')('not_found');
 
 module.exports = function not_found(req, res, next) {
 
