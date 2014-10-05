@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+// vi:syntax=javascript
+
+'use strict';
+
+var Command = require('commander').Command,
+    pkg = require('./../package.json'),
+    program = new Command(pkg.name);
+
+// for symlink parents
+program._executeSubCommand = program.executeSubCommand;
+program.executeSubCommand = function (argv, args, unknown) {
+    var fs = require('fs');
+
+    if (fs.lstatSync(argv[1]).isSymbolicLink()) {
+        argv[1] = fs.readlinkSync(argv[1]);
+    }
+
+    this._executeSubCommand(argv, args, unknown);
+};
+
+program.version(pkg.version)
+    .command('start', 'start the node server')
+    .command('create <app>', 'create a new vulpes application')
+    .parse(process.argv);
+
+if (!program.args.length) {
+    program.help();
+}
+    // .description('create a new vulpes application');
+    // .action(function (app) {
+    //     var packagejson;
+
+    //     [
+    //         app,
+    //         app + '/app',
+    //         app + '/assets',
+    //         app + '/config',
+    //         app + '/lib',
+    //     ].forEach(function (dir) {
+    //         console.log('  creating %s', color.xterm(222)(dir));
+    //         fs.mkdirSync(dir);
+    //     });
+
+    //     packagejson = fs.openSync(app + '/package.json', 'w');
+    //     fs.writeSync(packagejson, JSON.stringify({
+    //         name: app,
+    //         version: '0.0.0',
+    //         dependencies: {
+    //             vulpes: 'https://github.com/minond/vulpes/tarball/master'
+    //         }
+    //     }, null, '  '));
+    //     fs.closeSync(packagejson);
+    // });
