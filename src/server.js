@@ -1,6 +1,7 @@
 'use strict';
 
 var color = require('cli-color');
+
 console.log(color.xterm(232)('                        '));
 console.log(color.xterm(254)('     /\\                '));
 console.log(color.xterm(222)('    (~(                 '));
@@ -11,17 +12,16 @@ console.log(color.xterm(222)('      /|/--\\|\\ V      '));
 console.log(color.xterm(244)('      " "   " "         '));
 console.log(color.xterm(232)('                        '));
 
-var builder, build, config;
+var app = require('express')();
 
 var Configuration = require('acm'),
-    Builder = require('./builder');
-
-var app = require('express')(),
     log = require('debug')('vulpes:server'),
     path = require('path'),
+    map = require('lodash-node/modern/collections/map'),
+    format = require('util').format,
     cwd = process.cwd();
 
-config = new Configuration({
+var config = new Configuration({
     paths: [
         path.join(cwd, 'config'),
         path.join(__dirname, '..', 'config'),
@@ -29,13 +29,11 @@ config = new Configuration({
 });
 
 config.fields.cwd = cwd;
-builder = new Builder(config);
-build = builder.build();
 
 // should not require any middle ware
-build.routes.static.forEach(function (route) {
-    log('static route %s (%s)', route.url, route.dir);
-    app.use(route.url, require('serve-static')(route.dir));
+map(config.get('routes.static'), function (dir, url) {
+    log('static route %s (%s)', url, dir);
+    app.use(url, require('serve-static')(dir));
 });
 
 app.use(require('body-parser').urlencoded({ extended: false }));
@@ -47,10 +45,13 @@ app.set('views', cwd + '/assets/views/');
 app.engine('html', require('swig').renderFile);
 
 // application routes
-build.routes.dynamic.forEach(function (route) {
-    log('dynamic route %s (%s#%s)', route.url, route.controller_name, route.action);
-    var controller = require(route.controller);
-    app[ route.method ](route.url, controller[ route.action ]);
+map(config.get('routes.routes'), function (route, url) {
+    var method = route.method || config.get('controllers.controllers.defaults.method'),
+        action = route.action || config.get('controllers.controllers.defaults.action'),
+        controller = require(format(config.get('structure.structure.server.controllers'), route.controller));
+
+    log('dynamic route %s (%s#%s)', url, route.controller, action);
+    app[ method ](url, controller[ action ]);
 });
 
 if (process.env.NODE_ENV === 'development') {
@@ -58,9 +59,9 @@ if (process.env.NODE_ENV === 'development') {
     require('swig').setDefaults({ cache: false });
     require('errorhandler').title = 'Vulpes';
 
-    build.routes.static.forEach(function (route) {
-        log('serving index %s (%s)', route.url, route.dir);
-        app.use(route.url, require('serve-index')(route.dir));
+    map(config.get('routes.static'), function (dir, url) {
+        log('serving index %s (%s)', url, dir);
+        app.use(url, require('serve-index')(dir));
     });
 
     app.set('view cache', false);
