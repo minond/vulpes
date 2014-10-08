@@ -68,5 +68,5 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.get('*', require('./middleware/serve_views.js'));
-app.get('*', require('./middleware/not_found.js'));
+app.get('*', require('not-found')(app.get('views') + '404.html'));
 app.listen(process.env.PORT || 5000);

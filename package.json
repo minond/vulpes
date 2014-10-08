@@ -17,7 +17,8 @@
     "errorhandler": "~1.2.0",
     "serve-static": "~1.6.1",
     "acm": "0.0.3",
-    "lodash-node": "~2.4.1"
+    "lodash-node": "~2.4.1",
+    "not-found": "~1.0.1"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
