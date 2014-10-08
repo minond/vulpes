@@ -1,5 +1,16 @@
 'use strict';
 
+var color = require('cli-color');
+console.log(color.xterm(232)('                        '));
+console.log(color.xterm(254)('     /\\                '));
+console.log(color.xterm(222)('    (~(                 '));
+console.log(color.xterm(222)('     ) )     /\\_/\\    '));
+console.log(color.xterm(222)('    ( _-----_(- -)      '));
+console.log(color.xterm(222)('      (       \\ /      '));
+console.log(color.xterm(222)('      /|/--\\|\\ V      '));
+console.log(color.xterm(244)('      " "   " "         '));
+console.log(color.xterm(232)('                        '));
+
 var builder, build, config;
 
 var Configuration = require('acm'),

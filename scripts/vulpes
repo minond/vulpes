@@ -1,54 +1,59 @@
-#!/usr/bin/env node
-// vi:syntax=javascript
+#!/bin/bash
 
-'use strict';
-
-var Command = require('commander').Command,
-    pkg = require('./../package.json'),
-    program = new Command(pkg.name);
-
-// for symlink parents
-program._executeSubCommand = program.executeSubCommand;
-program.executeSubCommand = function (argv, args, unknown) {
-    var fs = require('fs');
-
-    if (fs.lstatSync(argv[1]).isSymbolicLink()) {
-        argv[1] = fs.readlinkSync(argv[1]);
-    }
-
-    this._executeSubCommand(argv, args, unknown);
-};
-
-program.version(pkg.version)
-    .command('start', 'start the node server')
-    .command('create <app>', 'create a new vulpes application')
-    .parse(process.argv);
-
-if (!program.args.length) {
-    program.help();
+usage() {
+    echo "Usage: vulpes [command] [options]"
+    echo
+    echo "Commands:"
+    echo
+    echo "  start           # start a vulpes app"
+    echo "  create          # create a new vulpes app"
+    echo
+    echo "Options:"
+    echo
+    echo "  -h, --help      # view this help text"
 }
-    // .description('create a new vulpes application');
-    // .action(function (app) {
-    //     var packagejson;
 
-    //     [
-    //         app,
-    //         app + '/app',
-    //         app + '/assets',
-    //         app + '/config',
-    //         app + '/lib',
-    //     ].forEach(function (dir) {
-    //         console.log('  creating %s', color.xterm(222)(dir));
-    //         fs.mkdirSync(dir);
-    //     });
+start_app() {
+    DEBUG=* \
+    NODE_PATH=`pwd`/node_modules/ \
+    node `pwd`/node_modules/vulpes/scripts/server
+}
 
-    //     packagejson = fs.openSync(app + '/package.json', 'w');
-    //     fs.writeSync(packagejson, JSON.stringify({
-    //         name: app,
-    //         version: '0.0.0',
-    //         dependencies: {
-    //             vulpes: 'https://github.com/minond/vulpes/tarball/master'
-    //         }
-    //     }, null, '  '));
-    //     fs.closeSync(packagejson);
-    // });
+create_app() {
+    local app=$1
+
+    if [ -z "$app" ]; then
+        while true;
+        do
+            echo -n "name: "
+            read app
+            [ ! -z "$app" ] && break
+        done
+    fi
+
+    echo "creating $app app"
+    mkdir $app
+    cd $app
+
+    mkdir app
+    mkdir assets
+    mkdir config
+    mkdir lib
+
+    cat > package.json <<JSON
+{
+    name: app,
+    version: '0.0.0',
+    dependencies: {
+        vulpes: 'https://github.com/minond/vulpes/tarball/master'
+    }
+}
+JSON
+}
+
+case "$1" in
+    start) start_app ;;
+    create) create_app $2 ;;
+    --help|-h) usage ;;
+    *) usage; exit 1 ;;
+esac
