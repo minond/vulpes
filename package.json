@@ -44,6 +44,6 @@
     "lodash": "~2.4.1"
   },
   "bin": {
-    "vulpes": "./scripts/vulpes.js"
+    "vulpes": "./vulpes"
   }
 }
