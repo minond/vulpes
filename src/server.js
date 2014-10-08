@@ -1,16 +1,15 @@
 'use strict';
 
-var app = require('express')();
-
-var config = require('acm'),
+var app = require('express')(),
     log = require('debug')('vulpes:server'),
-    path = require('path'),
-    map = require('lodash-node/modern/collections/map'),
-    format = require('util').format,
-    cwd = process.cwd();
+    config = require('acm');
+
+var path = require('path'),
+    util = require('util'),
+    map = require('lodash-node/modern/collections/map');
 
 config.$paths.push(path.join(__dirname, '..', 'config'));
-config.fields.cwd = cwd;
+config.fields.cwd = process.cwd();
 
 // should not require any middle ware
 map(config.get('routes.static'), function (dir, url) {
@@ -18,19 +17,18 @@ map(config.get('routes.static'), function (dir, url) {
     app.use(url, require('serve-static')(dir));
 });
 
+app.set('view engine', 'html');
+app.set('views', process.cwd() + '/assets/views/');
+app.engine('html', require('swig').renderFile);
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
 app.use(require('cookie-parser')(/* secret */));
-
-app.set('view engine', 'html');
-app.set('views', cwd + '/assets/views/');
-app.engine('html', require('swig').renderFile);
 
 // application routes
 map(config.get('routes.routes'), function (route, url) {
     var method = route.method || config.get('controllers.controllers.defaults.method'),
         action = route.action || config.get('controllers.controllers.defaults.action'),
-        controller = require(format(config.get('structure.structure.server.controllers'), route.controller));
+        controller = require(util.format(config.get('structure.structure.server.controllers'), route.controller));
 
     log('dynamic route %s (%s#%s)', url, route.controller, action);
     app[ method ](url, controller[ action ]);
