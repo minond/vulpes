@@ -14,7 +14,7 @@ console.log(color.xterm(232)('                        '));
 var builder, build, config;
 
 var Configuration = require('acm'),
-    Builder = require('../src/builder');
+    Builder = require('./builder');
 
 var app = require('express')(),
     log = require('debug')('vulpes:server'),
@@ -67,6 +67,6 @@ if (process.env.NODE_ENV === 'development') {
     app.use(require('errorhandler')());
 }
 
-app.get('*', require('../src/middleware/serve_views.js'));
-app.get('*', require('../src/middleware/not_found.js'));
+app.get('*', require('./middleware/serve_views.js'));
+app.get('*', require('./middleware/not_found.js'));
 app.listen(process.env.PORT || 5000);

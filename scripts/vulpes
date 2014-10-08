@@ -16,7 +16,7 @@ usage() {
 start_app() {
     DEBUG=* \
     NODE_PATH=`pwd`/node_modules/ \
-    node `pwd`/node_modules/vulpes/scripts/server
+    node `pwd`/node_modules/vulpes/src/server
 }
 
 create_app() {
