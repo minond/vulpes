@@ -2,20 +2,14 @@
 
 var app = require('express')();
 
-var Configuration = require('acm'),
+var config = require('acm'),
     log = require('debug')('vulpes:server'),
     path = require('path'),
     map = require('lodash-node/modern/collections/map'),
     format = require('util').format,
     cwd = process.cwd();
 
-var config = new Configuration({
-    paths: [
-        path.join(cwd, 'config'),
-        path.join(__dirname, '..', 'config'),
-    ]
-});
-
+config.$paths.push(path.join(__dirname, '..', 'config'));
 config.fields.cwd = cwd;
 
 // should not require any middle ware
