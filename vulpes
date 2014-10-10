@@ -16,7 +16,7 @@ usage() {
 start_app() {
     DEBUG=* \
     NODE_PATH=`pwd`/node_modules/ \
-    node `pwd`/node_modules/vulpes/src/server
+    node `pwd`/node_modules/vulpes/src/server $@
 }
 
 create_app() {
@@ -52,7 +52,7 @@ JSON
 }
 
 case "$1" in
-    start) start_app ;;
+    start) shift; start_app $* ;;
     create) create_app $2 ;;
     --help|-h) usage ;;
     *) usage; exit 1 ;;

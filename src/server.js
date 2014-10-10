@@ -21,7 +21,7 @@ app.set('views', process.cwd() + '/assets/views/');
 app.engine('html', require('swig').renderFile);
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
-app.use(require('cookie-parser')(/* secret */));
+app.use(require('cookie-parser')(config.get('application.cookies.secret')));
 
 // application routes
 map(config.get('routes.routes'), function (route, url) {
