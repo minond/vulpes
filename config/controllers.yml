@@ -1,4 +1,0 @@
-controllers:
-  defaults:
-    action: index
-    method: get

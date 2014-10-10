@@ -26,9 +26,9 @@ app.use(require('cookie-parser')(/* secret */));
 
 // application routes
 map(config.get('routes.routes'), function (route, url) {
-    var method = route.method || config.get('controllers.controllers.defaults.method'),
-        action = route.action || config.get('controllers.controllers.defaults.action'),
-        controller = require(util.format(config.get('structure.structure.server.controllers'), route.controller));
+    var method = route.method || config.get('structure.controllers.method'),
+        action = route.action || config.get('structure.controllers.action'),
+        controller = require(util.format(config.get('structure.server.controllers'), route.controller));
 
     log('dynamic route %s (%s#%s)', url, route.controller, action);
     app[ method ](url, controller[ action ]);

@@ -1,3 +1,6 @@
-structure:
-  server:
-    controllers: <%= cwd %>/app/controllers/%s.js
+server:
+  controllers: <%= cwd %>/app/controllers/%s.js
+
+controllers:
+  action: index
+  method: get
