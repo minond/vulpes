@@ -4,14 +4,13 @@ var app = require('express')(),
     log = require('debug')('vulpes:server'),
     config = require('acm');
 
-var path = require('path'),
-    util = require('util'),
+var join = require('path').join,
+    format = require('util').format,
     map = require('lodash-node/modern/collections/map');
 
-config.$paths.push(path.join(__dirname, '..', 'config'));
-config.fields.cwd = process.cwd();
+config.$paths.push(join(__dirname, '..', 'config'));
 
-// should not require any middle ware
+// define static files first. should not require middleware
 map(config.get('routes.static'), function (dir, url) {
     log('static route %s (%s)', url, dir);
     app.use(url, require('serve-static')(dir));
@@ -28,7 +27,7 @@ app.use(require('cookie-parser')(/* secret */));
 map(config.get('routes.routes'), function (route, url) {
     var method = route.method || config.get('structure.controllers.method'),
         action = route.action || config.get('structure.controllers.action'),
-        controller = require(util.format(config.get('structure.server.controllers'), route.controller));
+        controller = require(format(config.get('structure.server.controllers'), route.controller));
 
     log('dynamic route %s (%s#%s)', url, route.controller, action);
     app[ method ](url, controller[ action ]);
