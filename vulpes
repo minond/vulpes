@@ -6,11 +6,16 @@ usage() {
     echo "Commands:"
     echo
     echo "  start           # start a vulpes app"
+    echo "  watch           # start a vulpes app and restart on updates"
     echo "  create          # create a new vulpes app"
     echo
     echo "Options:"
     echo
     echo "  -h, --help      # view this help text"
+}
+
+watch_app() {
+    nodemon --exec "vulpes start $@"
 }
 
 start_app() {
@@ -52,6 +57,7 @@ JSON
 }
 
 case "$1" in
+    watch) shift; watch_app $* ;;
     start) shift; start_app $* ;;
     create) create_app $2 ;;
     --help|-h) usage ;;
