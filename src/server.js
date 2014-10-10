@@ -40,7 +40,7 @@ map(filter(config.get('routes'), function (route, url) {
 if (process.env.NODE_ENV === 'development') {
     log('detected development enviroment');
     require('swig').setDefaults({ cache: false });
-    require('errorhandler').title = require('package.json').name;
+    require('errorhandler').title = require('./package.json').name;
 
     map(config.get('routes.=static'), function (dir, url) {
         log('serving index %s (%s)', url, dir);
