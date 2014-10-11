@@ -1,7 +1,6 @@
 'use strict';
 
-var socket,
-    app = require('express')(),
+var app = require('express')(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
     log = require('debug')('vulpes:server'),
