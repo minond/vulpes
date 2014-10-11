@@ -1,8 +1,5 @@
 'use strict';
 
-var web_port = process.env.WEB_PORT || process.env.PORT || 5000,
-    sock_port = process.env.SOCK_PORT || 9999;
-
 var socket,
     app = require('express')(),
     server = require('http').Server(app),
@@ -60,8 +57,4 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(require('pageview')(app.get('views')));
 app.use(require('not-found')(app.get('views') + '404.html'));
-
-log('web server listning on port %s', web_port);
-log('socket server listning on port %s', sock_port);
-app.listen(web_port);
-io.listen(sock_port);
+server.listen(process.env.PORT || 5000);

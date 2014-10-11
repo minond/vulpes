@@ -15,7 +15,9 @@ usage() {
 }
 
 watch_app() {
-    nodemon --exec "vulpes start $@"
+    NODE_ENV=development \
+    nodemon --exec "vulpes start $@" \
+        -w app -w config
 }
 
 start_app() {
