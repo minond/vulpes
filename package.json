@@ -18,7 +18,8 @@
     "acm": "1.0.2",
     "lodash-node": "~2.4.1",
     "not-found": "~1.0.1",
-    "pageview": "0.0.1"
+    "pageview": "0.0.1",
+    "socket.io": "~1.1.0"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",

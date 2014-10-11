@@ -1,6 +1,12 @@
 'use strict';
 
-var app = require('express')(),
+var web_port = process.env.WEB_PORT || process.env.PORT || 5000,
+    sock_port = process.env.SOCK_PORT || 9999;
+
+var socket,
+    app = require('express')(),
+    server = require('http').Server(app),
+    io = require('socket.io')(server),
     log = require('debug')('vulpes:server'),
     config = require('acm');
 
@@ -23,6 +29,7 @@ app.engine('html', require('swig').renderFile);
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
 app.use(require('cookie-parser')(config.get('application.cookies.secret')));
+app.use(function (req, res, next) { req.io = io; return next(); });
 
 // application routes
 map(filter(config.get('routes'), function (route, url) {
@@ -53,4 +60,8 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(require('pageview')(app.get('views')));
 app.use(require('not-found')(app.get('views') + '404.html'));
-app.listen(process.env.PORT || 5000);
+
+log('web server listning on port %s', web_port);
+log('socket server listning on port %s', sock_port);
+app.listen(web_port);
+io.listen(sock_port);
