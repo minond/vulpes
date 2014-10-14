@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    index: function (req, res) {
-        res.send('hello, world');
+    greet: function (req, res) {
+        res.send('hello, ' + (req.params.name || 'world'));
     }
 };
