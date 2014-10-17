@@ -44,7 +44,7 @@ create_app() {
     echo "creating $app app"
     cp -r $VULPES_DIR/sample_application/ $app
     cd $app
-    sed -i "s/%APP%/$app/" bower.json package.json assets/views/index.html
+    sed -i "s/%APP%/$app/" bower.json package.json
 }
 
 case "$1" in
