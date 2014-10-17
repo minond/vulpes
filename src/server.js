@@ -1,6 +1,7 @@
 'use strict';
 
 var DEBUG = process.env.NODE_ENV === 'development',
+    pkg = require(process.cwd() + '/package.json'),
     make;
 
 var express = require('express'),
@@ -80,14 +81,19 @@ config.$paths.push(join(__dirname, '..', 'config'));
 app.use(require('body-parser').urlencoded({ extended: false }));
 app.use(require('body-parser').json());
 app.use(require('cookie-parser')(config.get('application.cookies.secret')));
-app.use(function (req, res, next) { req.io = io; return next(); });
+app.use(function (req, res, next) {
+    req.io = io;
+    req.pkg = pkg;
+    req.config = config;
+    return next();
+});
 
 make(app, process.cwd(), '', config);
 
 if (DEBUG) {
     log('detected development enviroment');
     require('swig').setDefaults({ cache: false });
-    require('errorhandler').title = require(process.cwd() + '/package.json').name;
+    require('errorhandler').title = pkg.name;
     app.set('view cache', false);
     app.use(require('errorhandler')());
 }

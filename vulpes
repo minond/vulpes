@@ -42,10 +42,8 @@ create_app() {
     fi
 
     echo "creating $app app"
-    mkdir $app
+    cp -r $VULPES_DIR/sample_application/ $app
     cd $app
-
-    cp -r $VULPES_DIR/sample_application/* ./
     sed -i "s/%APP%/$app/" bower.json package.json assets/views/index.html
 }
 
