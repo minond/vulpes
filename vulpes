@@ -23,7 +23,8 @@ watch_app() {
 }
 
 start_app() {
-    DEBUG=* \
+    [ -z "$DEBUG" ] && DEBUG=*
+    DEBUG=$DEBUG \
     NODE_PATH=`pwd`/node_modules/ \
     node `pwd`/node_modules/vulpes/src/server $@
 }

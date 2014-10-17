@@ -1,6 +1,0 @@
-server:
-  controllers: <%= process.cwd() %>/app/controllers/%s.js
-
-controllers:
-  action: index
-  method: get

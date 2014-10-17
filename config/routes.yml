@@ -1,3 +1,3 @@
 =static:
-  /lib: <%= process.cwd() %>/lib
-  /assets: <%= process.cwd() %>/assets
+  /lib: lib
+  /assets: assets
