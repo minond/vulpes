@@ -28,8 +28,8 @@
 {% endblock %}
 
 {% block content %}
-    {{ dump('routes', routes) }}
-    {{ dump('route', route) }}
-    {{ dump('headers', headers) }}
-    {{ dump('request', request) }}
+    {{ dump('routes', routes | json(2)) }}
+    {{ dump('route', route | json(2)) }}
+    {{ dump('headers', headers | json(2)) }}
+    {{ dump('request', request | json(2)) }}
 {% endblock %}
