@@ -45,6 +45,7 @@ create_app() {
     cp -r $VULPES_DIR/sample_application/ $app
     cd $app
     sed -i "s/%APP%/$app/" bower.json package.json
+    make
 }
 
 case "$1" in
