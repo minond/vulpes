@@ -1,3 +1,2 @@
 /:
-  controller: Index
-  action: dump
+  handler: sample/controllers/index#dump

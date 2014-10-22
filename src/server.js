@@ -41,7 +41,7 @@ function dynamic_routes(app, dir, base, routes) {
         route.url = url;
         return url[0] !== '=';
     }), function (route) {
-        var method, action, controller;
+        var handler, func;
 
         if (route.mount) {
             log('mounting %s on %s', route.mount, route.url);
@@ -49,7 +49,7 @@ function dynamic_routes(app, dir, base, routes) {
             app.use(make(
                 express(),
                 route.mount,
-                route.url,
+                base + route.url,
                 new config.Configuration({ paths: [
                     join(route.mount, 'config'),
                     join(route.mount, 'node_modules', 'vulpes', 'config')
@@ -57,15 +57,14 @@ function dynamic_routes(app, dir, base, routes) {
             ));
 
             return;
+        } else {
+            log('dynamic route %s handled by %s', route.url, route.handler);
+
+            func = route.handler.split('#').pop();
+            handler = route.handler.split('#').shift();
+            handler = require(format('%s/app/%s.js', dir, handler));
+            app[ route.method || 'get' ](base + route.url, handler[ func ]);
         }
-
-        method = route.method || 'get';
-        action = route.action || 'index';
-        route.url = base + route.url;
-
-        log('dynamic route %s (%s#%s)', route.url, route.controller, action);
-        controller = require(format('%s/app/controllers/%s.js', dir, route.controller));
-        app[ method ](route.url, controller[ action ]);
     });
 }
 

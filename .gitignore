@@ -1,3 +1,6 @@
 /node_modules/
 /vendor/
 /build/
+
+/sample_application/node_modules/
+/sample_application/assets/vendor/
