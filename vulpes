@@ -1,7 +1,18 @@
 #!/bin/bash
 
+#==============================================================================
+#         FILE: vulpes
+#        USAGE: see usage function
+#  DESCRIPTION: script for running, developing, and creating vulpes apps
+# REQUIREMENTS: node, npm, nodemon
+#==============================================================================
+
 VULPES_DIR=`dirname $(readlink -f $0)`
 
+#=== FUNCTION =================================================================
+#        NAME: usage
+# DESCRIPTION: outputs usage text
+#==============================================================================
 usage() {
     echo "Usage: vulpes [command] [options]"
     echo
@@ -16,12 +27,20 @@ usage() {
     echo "  -h, --help      # view this help text"
 }
 
+#=== FUNCTION =================================================================
+#        NAME: watch_app
+# DESCRIPTION: starts nodemon and makes it watch the app and config dirs
+#==============================================================================
 watch_app() {
     NODE_ENV=development \
     nodemon --exec "vulpes start $@" \
         -w app -w config
 }
 
+#=== FUNCTION =================================================================
+#        NAME: start_app
+# DESCRIPTION: starts the vulpes server
+#==============================================================================
 start_app() {
     [ -z "$DEBUG" ] && DEBUG=*
     DEBUG=$DEBUG \
@@ -29,6 +48,12 @@ start_app() {
     node `pwd`/node_modules/vulpes/src/server $@
 }
 
+#=== FUNCTION =================================================================
+#        NAME: create_app
+# DESCRIPTION: copies the sample_application directory as a new, blank, vulpes
+#              application and installs all dependencies
+# PARAMETER 1: app - application name. must be a single word (for npm)
+#==============================================================================
 create_app() {
     local app=$1
 
