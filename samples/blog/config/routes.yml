@@ -1,5 +1,5 @@
 /:
-  handler: blog/controllers/welcome#index
+  serve: blog/welcome
 
 /p/:date/:name:
   handler: blog/controllers/posts#serve
