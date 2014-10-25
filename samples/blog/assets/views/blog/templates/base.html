@@ -1,0 +1,25 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="{{ description }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% endblock %}
+
+        {% block styles %}
+        <link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+        {% endblock %}
+        {% block resources %}{% endblock %}
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+
+        {% block scripts %}
+        <script src="/assets/vendor/modernizr/modernizr.js"></script>
+        {% endblock %}
+    </body>
+</html>

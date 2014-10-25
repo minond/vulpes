@@ -1,0 +1,2 @@
+/:
+  handler: blog/controllers/welcome#index
