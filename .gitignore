@@ -2,5 +2,5 @@
 /vendor/
 /build/
 
-/sample_application/node_modules/
-/sample_application/assets/vendor/
+/samples/*/node_modules/
+/samples/*/assets/vendor/

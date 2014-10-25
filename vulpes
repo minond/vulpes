@@ -50,7 +50,7 @@ start_app() {
 
 #=== FUNCTION =================================================================
 #        NAME: create_app
-# DESCRIPTION: copies the sample_application directory as a new, blank, vulpes
+# DESCRIPTION: copies the samples/base directory as a new, blank, vulpes
 #              application and installs all dependencies
 # PARAMETER 1: app - application name. must be a single word (for npm)
 #==============================================================================
@@ -67,7 +67,7 @@ create_app() {
     fi
 
     echo "creating $app app"
-    cp -r $VULPES_DIR/sample_application/ $app
+    cp -r $VULPES_DIR/samples/basic/ $app
     cd $app
     sed -i "s/%APP%/$app/" bower.json package.json
     make
