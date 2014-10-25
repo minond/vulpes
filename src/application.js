@@ -111,6 +111,21 @@ function dynamic_route_handler(app, dir, base, route) {
 }
 
 /**
+ * creates a dynamic route that just serves a static file
+ * @function dynamic_route_serve
+ * @param {express} app
+ * @param {String} dir base directory
+ * @param {String} base url prefix
+ * @param {Object} route definition from app config
+ * @return {express}
+ */
+function dynamic_route_serve(app, dir, base, route) {
+    app.all(base + route.url, function (req, res) {
+        res.render(route.serve);
+    });
+}
+
+/**
  * sets up all configured routes
  * @function dynamic_routes
  * @param {express} app
@@ -126,6 +141,8 @@ function dynamic_routes(app, dir, base, routes) {
     }), function (route) {
         if (route.mount) {
             dynamic_route_mount(app, dir, base, route);
+        } else if (route.serve) {
+            dynamic_route_serve(app, dir, base, route);
         } else {
             dynamic_route_handler(app, dir, base, route);
         }
