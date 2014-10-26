@@ -11,7 +11,8 @@ var express = require('express'),
     serve_index = require('serve-index'),
     log = require('debug')('vulpes:app');
 
-var join = require('path').join,
+var fs = require('fs'),
+    join = require('path').join,
     format = require('util').format;
 
 var filter = require('lodash-node/modern/collections/filter'),
@@ -25,13 +26,16 @@ var filter = require('lodash-node/modern/collections/filter'),
  * @return {express}
  */
 function serve_views(app, dir) {
+    var lswig = new swig.Swig();
+    app._.swig = lswig;
+
     app.set('view engine', 'html');
     app.set('views', dir + '/assets/views/');
-    app.engine('html', swig.renderFile);
+    app.engine('html', lswig.renderFile);
 
     if (DEBUG) {
         app.set('view cache', false);
-        swig.setDefaults({ cache: false });
+        lswig.options.cache = false;
     }
 
     return app;
@@ -152,6 +156,28 @@ function dynamic_routes(app, dir, base, routes) {
 }
 
 /**
+ * @function run_initializers
+ * @param {express} app
+ * @param {String} dir base directory
+ * @return {express}
+ */
+function run_initializers(app, dir) {
+    var initalizers_dir = join(dir, 'config', 'initializers');
+
+    if (fs.existsSync(initalizers_dir)) {
+        fs.readdirSync(initalizers_dir).forEach(function (file) {
+            if (file.substr(-3) !== '.js') {
+                return;
+            }
+
+            log('loading %s initializer', file);
+            file = join(initalizers_dir, file);
+            require(file)(app._);
+        });
+    }
+}
+
+/**
  * builds an app
  * @function make
  * @param {express} app
@@ -161,9 +187,17 @@ function dynamic_routes(app, dir, base, routes) {
  * @return {express}
  */
 function make(app, dir, base, config) {
+    app._ = {
+        app: app,
+        config: config,
+        dir: dir,
+        base: base,
+    };
+
     static_routes(app, dir, config);
     serve_views(app, dir);
     dynamic_routes(app, dir, base, config.get('routes'));
+    run_initializers(app, dir);
 
     return app;
 }
