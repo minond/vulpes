@@ -1,6 +1,6 @@
-## hello, world
+## Hello, world
 
-### section 1
+### Section 1
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet
 ligula non nunc mattis interdum. Phasellus congue eros viverra pharetra
@@ -18,7 +18,9 @@ lobortis, odio quis finibus eleifend, justo augue gravida risus, ut malesuada
 libero tortor condimentum dui. Cras vestibulum, diam ut accumsan finibus, est
 ante suscipit quam, eu porttitor lorem mi ac sem.
 
-### section 2
+![Sample Image](http://placehold.it/1500X500)
+
+### Section 2
 
 Curabitur interdum turpis lorem, et maximus arcu dictum ac. In in mi sed felis
 hendrerit imperdiet id quis nisl. Maecenas rhoncus, dolor rutrum blandit
@@ -47,3 +49,23 @@ senectus et netus et malesuada fames ac turpis egestas. Nam suscipit urna vel
 urna ornare vehicula. Cras in mauris dapibus, dapibus diam vitae, auctor nibh.
 Donec commodo felis mi, id sodales magna sodales vitae. Morbi vitae nulla
 convallis, lacinia sem quis, ultrices arcu.
+
+### Section 3
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet
+ligula non nunc mattis interdum. Phasellus congue eros viverra pharetra
+convallis. Quisque eu diam rutrum turpis commodo commodo. Donec facilisis
+volutpat ante at mattis. Maecenas vehicula elit quam, sit amet condimentum
+libero tempor nec. Etiam pharetra arcu vitae lacus pretium, quis ultricies
+magna imperdiet. Aliquam tristique, velit nec rhoncus tristique, nisi risus
+pharetra ipsum, sed suscipit mauris nisi vel tortor. Sed egestas nulla vitae
+est pulvinar mattis. Vivamus scelerisque urna et elementum tempus.
+
+![Sample Image](http://placehold.it/500X500)
+
+Nullam quis nisl eros. Proin tempus vitae est vel suscipit. Suspendisse
+vulputate tincidunt ex eu pretium. Integer hendrerit molestie aliquet. Integer
+consequat quam tortor, porttitor bibendum tortor convallis ut. Praesent
+lobortis, odio quis finibus eleifend, justo augue gravida risus, ut malesuada
+libero tortor condimentum dui. Cras vestibulum, diam ut accumsan finibus, est
+ante suscipit quam, eu porttitor lorem mi ac sem.

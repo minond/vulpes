@@ -1,0 +1,23 @@
+.content {
+    cursor: default;
+    font-family: Crimson Text, Arial;
+    margin: 1em auto;
+    max-width: 40em;
+    padding: 1em;
+    font-size: 1.2em
+}
+
+.content h2 {
+    border-bottom: 1px solid rgb(207, 207, 207);
+    padding-bottom: .7em;
+}
+
+.content h3 {
+    padding-top: 1em;
+}
+
+.content img {
+    max-width: 95%;
+    display: block;
+    margin: 0 auto;
+}

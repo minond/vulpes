@@ -10,13 +10,17 @@
         {% endblock %}
 
         {% block styles %}
-        <link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+        <link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css" type="text/css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Crimson+Text" type="text/css">
+        <link rel="stylesheet" href="/assets/css/blog/main.css" type="text/css">
         {% endblock %}
         {% block resources %}{% endblock %}
     </head>
     <body>
+        <section class="content">
         {% block content %}
         {% endblock %}
+        </section>
 
         {% block scripts %}
         <script src="/assets/vendor/modernizr/modernizr.js"></script>
