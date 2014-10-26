@@ -11,11 +11,29 @@ module.exports = {
      * @param {Function} next
      */
     serve: function (req, res, next) {
-        postService.fetch(req.params.date, req.params.name, function (err, contents) {
-            if (err || !contents) {
+        postService.fetch(req.params.date, req.params.name, function (err, content) {
+            if (err || !content) {
                 next(err ? err : null);
             } else {
-                res.end(contents);
+                res.format({
+                    text: function () {
+                        res.end(content);
+                    },
+
+                    html: function () {
+                        res.render('blog/post', {
+                            content: content.toString()
+                        });
+                    },
+
+                    json: function () {
+                        res.json({
+                            name: req.params.name,
+                            date: req.params.date,
+                            content: content.toString()
+                        });
+                    }
+                });
             }
         });
     }
