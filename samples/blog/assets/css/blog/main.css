@@ -21,3 +21,11 @@
     display: block;
     margin: 0 auto;
 }
+
+.content .post {
+    border-bottom: 1px solid rgb(207, 207, 207);
+}
+
+.content .post:last-child {
+    border-bottom: 0;
+}

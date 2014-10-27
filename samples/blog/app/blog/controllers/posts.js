@@ -4,6 +4,27 @@ var postService = require('../services/posts');
 
 module.exports = {
     /**
+     * renders all posts
+     * @method serve
+     * @param {http.Request} req
+     * @param {http.Response} res
+     * @param {Function} next
+     */
+    list: function (req, res, next) {
+        postService.list(function (err, posts) {
+            if (err) {
+                next(err);
+            } else {
+                res.format({
+                    html: function () {
+                        res.render('blog/welcome', { posts: posts });
+                    }
+                });
+            }
+        });
+    },
+
+    /**
      * fetches a post from post service and sends in the request
      * @method serve
      * @param {http.Request} req
@@ -16,20 +37,8 @@ module.exports = {
                 next(err ? err : null);
             } else {
                 res.format({
-                    text: function () {
-                        res.end(content);
-                    },
-
                     html: function () {
                         res.render('blog/post', {
-                            content: content.toString()
-                        });
-                    },
-
-                    json: function () {
-                        res.json({
-                            name: req.params.name,
-                            date: req.params.date,
                             content: content.toString()
                         });
                     }

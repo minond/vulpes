@@ -1,9 +1,6 @@
 {
   "name": "vulpes-sample-blog",
   "dependencies": {
-    "normalize-css": "~3.0.1",
-    "angular": "~1.2.19",
-    "modernizr": "~2.8.3",
-    "lodash": "~2.4.1"
+    "normalize-css": "~3.0.1"
   }
 }
