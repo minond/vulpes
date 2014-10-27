@@ -43,8 +43,8 @@ module.exports = {
 
         if (parts && parts.length) {
             info.date = new Date(parts[1]);
-            info.name = parts[2];
-            info.link = format('/p/%s/%s', parts[1].replace(/-/g, ''), info.name);
+            info.name = parts[2].replace(/-/g, ' ');
+            info.link = format('/p/%s/%s', parts[1].replace(/-/g, ''), parts[2]);
         }
 
         return info;
