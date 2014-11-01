@@ -1,5 +1,4 @@
 /:
-  # serve: blog/welcome
   handler: blog/controllers/posts#list
 
 /p/:date/:name:

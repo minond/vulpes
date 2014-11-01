@@ -13,14 +13,14 @@ module.exports = {
     list: function (req, res, next) {
         postService.list(function (err, posts) {
             if (err) {
-                next(err);
-            } else {
-                res.format({
-                    html: function () {
-                        res.render('blog/welcome', { posts: posts });
-                    }
-                });
+                return next(err);
             }
+
+            res.format({
+                html: function () {
+                    res.render('blog/welcome', { posts: posts });
+                }
+            });
         });
     },
 
@@ -34,16 +34,16 @@ module.exports = {
     serve: function (req, res, next) {
         postService.fetch(req.params.date, req.params.name, function (err, content) {
             if (err || !content) {
-                next(err ? err : null);
-            } else {
-                res.format({
-                    html: function () {
-                        res.render('blog/post', {
-                            content: content.toString()
-                        });
-                    }
-                });
+                return next(err ? err : null);
             }
+
+            res.format({
+                html: function () {
+                    res.render('blog/post', {
+                        content: content.toString()
+                    });
+                }
+            });
         });
     }
 };
