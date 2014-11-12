@@ -3,11 +3,11 @@
 #==============================================================================
 #         FILE: vulpes
 #        USAGE: see usage function
-#  DESCRIPTION: script for running, developing, and creating vulpes apps
+#  DESCRIPTION: script for running, developing, and creating vulpes projects
 # REQUIREMENTS: node, npm, nodemon
 #==============================================================================
 
-VULPES_DIR=`dirname $(readlink -f $0)`
+[ -z "$VULPES_HOME" ] && VULPES_HOME=$(dirname "$(readlink -f "$0")")
 
 #=== FUNCTION =================================================================
 #        NAME: usage
@@ -18,9 +18,9 @@ usage() {
     echo
     echo "Commands:"
     echo
-    echo "  start           # start a vulpes app"
-    echo "  watch           # start a vulpes app and restart on updates"
-    echo "  create          # create a new vulpes app"
+    echo "  start           # start a vulpes project"
+    echo "  watch           # start a vulpes project and restart on updates"
+    echo "  create          # create a new vulpes project"
     echo
     echo "Options:"
     echo
@@ -28,55 +28,59 @@ usage() {
 }
 
 #=== FUNCTION =================================================================
-#        NAME: watch_app
-# DESCRIPTION: starts nodemon and makes it watch the app and config dirs
+#        NAME: watch
+# DESCRIPTION: starts nodemon and makes it watch the project and config dirs
 #==============================================================================
-watch_app() {
+watch() {
     NODE_ENV=development \
     nodemon --exec "vulpes start $@" \
         -w app -w config
 }
 
 #=== FUNCTION =================================================================
-#        NAME: start_app
+#        NAME: start
 # DESCRIPTION: starts the vulpes server
 #==============================================================================
-start_app() {
-    [ -z "$DEBUG" ] && DEBUG=*
+start() {
+    [ -z "$DEBUG" ] && DEBUG='*'
     DEBUG=$DEBUG \
-    NODE_PATH=`pwd`/node_modules/ \
-    node `pwd`/node_modules/vulpes/src/server $@
+    NODE_PATH="$(pwd)/node_modules/" \
+    node "$(pwd)/node_modules/vulpes/src/server" "$@"
 }
 
 #=== FUNCTION =================================================================
-#        NAME: create_app
+#        NAME: create
 # DESCRIPTION: copies the samples/base directory as a new, blank, vulpes
-#              application and installs all dependencies
-# PARAMETER 1: app - application name. must be a single word (for npm)
+#              project and installs all dependencies
+# PARAMETER 1: project - project name. must be a single word (for npm)
 #==============================================================================
-create_app() {
-    local app=$1
+create() {
+    local project=$1
 
-    if [ -z "$app" ]; then
+    if [ -z "$project" ]; then
         while true;
         do
             echo -n "name: "
-            read app
-            [ ! -z "$app" ] && break
+            read project
+            [ ! -z "$project" ] && break
         done
     fi
 
-    echo "creating $app app"
-    cp -r $VULPES_DIR/samples/basic/ $app
-    cd $app
-    sed -i "s/%APP%/$app/" bower.json package.json
+    echo "creating $project project"
+    cp -r "$VULPES_HOME/samples/basic/" "$project"
+    cd "$project"
+    sed -i "s/%APP%/$project/" bower.json package.json
     make
 }
 
-case "$1" in
-    watch) shift; watch_app $* ;;
-    start) shift; start_app $* ;;
-    create) create_app $2 ;;
-    --help|-h) usage ;;
-    *) usage; exit 1 ;;
-esac
+if [ -z "$1" ]; then
+    start
+else
+    case "$1" in
+        watch) shift; watch "$@" ;;
+        start) shift; start "$@" ;;
+        create) create "$2" ;;
+        --help|-h) usage ;;
+        *) usage; exit 1 ;;
+    esac
+fi
