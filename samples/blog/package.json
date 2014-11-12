@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "vulpes": "https://github.com/minond/vulpes/tarball/master",
-    "swig-extras": "0.0.1"
+    "swig-extras": "0.0.1",
+    "marked": "~0.3.2"
   }
 }

@@ -5,9 +5,10 @@
 
     {% for post in posts %}
         <div class="post">
-            <h4>
-                <a href="{{ post.link }}">{{ post.name }}</a>
-            </h4>
+            <a href="{{ post.link }}">
+                <h4>{{ post.name }}</h4>
+                <div class="sample">{{ post.sample }}</div>
+            </a>
         </div>
     {% endfor %}
 {% endblock %}

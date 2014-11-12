@@ -1,7 +1,7 @@
 'use strict';
 
 var pkg = require(process.cwd() + '/package.json'),
-    make = require('./application');
+    make = require('./application').make;
 
 var express = require('express'),
     app = express(),

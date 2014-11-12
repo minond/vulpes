@@ -202,4 +202,13 @@ function make(app, dir, base, config) {
     return app;
 }
 
-module.exports = make;
+module.exports = {
+    make: make,
+    dynamic_route_handler: dynamic_route_handler,
+    dynamic_route_mount: dynamic_route_mount,
+    dynamic_route_serve: dynamic_route_serve,
+    dynamic_routes: dynamic_routes,
+    run_initializers: run_initializers,
+    serve_views: serve_views,
+    static_routes: static_routes,
+};

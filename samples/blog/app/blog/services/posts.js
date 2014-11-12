@@ -5,9 +5,15 @@ var POST_INFO_EXTRACT = /(\d{4}-\d{2}-\d{2})-(.+)\.md/,
 
 var fs = require('fs'),
     join = require('path').join,
-    format = require('util').format;
+    format = require('util').format,
+    marked = require('marked');
 
 module.exports = {
+    /**
+     * @var {Object}
+     */
+    sample_content_cache: {},
+
     /**
      * @method is_post
      * @param {String} file
@@ -20,11 +26,11 @@ module.exports = {
     /**
      * @method gen_path
      * @param {String} date (example: 20141025)
-     * @param {String} name (example: hello-world)
+     * @param {String} [name] (example: hello-world)
      * @return {String} (example: /home/blog/posts/2014-10-25-hello-world.md)
      */
     gen_path: function postsServiceGeneratePath(date, name) {
-        var file = format('%s-%s.md', date
+        var file = !name ? date : format('%s-%s.md', date
             .match(POST_DATE_REFORMAT)
             .filter(function (d, i) { return i; })
             .join('-'), name);
@@ -45,9 +51,38 @@ module.exports = {
             info.date = new Date(parts[1]);
             info.name = parts[2].replace(/-/g, ' ');
             info.link = format('/p/%s/%s', parts[1].replace(/-/g, ''), parts[2]);
+            info.sample = this.gen_sample(file);
         }
 
         return info;
+    },
+
+    /**
+     * @method gen_sample
+     * @param {String} file anme
+     * @return {String}
+     */
+    gen_sample: function postsServiceGenerateSample(file) {
+        var sample;
+
+        if (file in this.sample_content_cache) {
+            return this.sample_content_cache[ file ];
+        }
+
+        sample = fs.readFileSync(this.gen_path(file))
+            .toString();
+
+        sample = marked(sample);
+        sample = sample.replace(/\n/g, ' ');
+        sample = sample.match(/<p>(.+?)<\/p>/);
+        sample = sample[1] || '';
+
+        if (sample.length > 450) {
+            sample = sample.substr(0, 390).trim() + '  [cont.]';
+        }
+
+        this.sample_content_cache[ file ] = sample;
+        return sample;
     },
 
     /**
@@ -56,14 +91,13 @@ module.exports = {
      * @param {Function} cb
      */
     list: function postsServiceList(cb) {
-        var me = this;
         fs.readdir(join(process.cwd(), 'posts'), function (err, posts) {
             if (err) {
                 cb(err);
             } else {
-                cb(null, posts.filter(me.is_post).map(me.gen_info));
+                cb(null, posts.filter(this.is_post).map(this.gen_info.bind(this)));
             }
-        });
+        }.bind(this));
     },
 
     /**
