@@ -1,2 +1,2 @@
 /:
-  handler: basic/controllers/index#dump
+  handler: basic/controllers/index.dump

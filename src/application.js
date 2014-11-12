@@ -106,8 +106,8 @@ function dynamic_route_handler(app, dir, base, route) {
 
     log('dynamic route %s handled by %s', route.url, route.handler);
 
-    func = route.handler.split('#').pop();
-    handler = route.handler.split('#').shift();
+    func = route.handler.split('.').pop();
+    handler = route.handler.split('.').shift();
     handler = require(format('%s/app/%s.js', dir, handler));
     app[ route.method || 'get' ](base + route.url, handler[ func ].bind(handler));
 
