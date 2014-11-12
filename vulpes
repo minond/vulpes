@@ -3,7 +3,7 @@
 #==============================================================================
 #         FILE: vulpes
 #        USAGE: see usage function
-#  DESCRIPTION: script for running, developing, and creating vulpes projects
+#  DESCRIPTION: script for running, developing, and creating vulpes applications
 # REQUIREMENTS: node, npm, nodemon
 #==============================================================================
 
@@ -18,9 +18,9 @@ usage() {
     echo
     echo "Commands:"
     echo
-    echo "  start           # start a vulpes project"
-    echo "  watch           # start a vulpes project and restart on updates"
-    echo "  create          # create a new vulpes project"
+    echo "  start           # start a vulpes application"
+    echo "  watch           # start a vulpes application and restart on updates"
+    echo "  create          # create a new vulpes application"
     echo
     echo "Options:"
     echo
@@ -29,7 +29,7 @@ usage() {
 
 #=== FUNCTION =================================================================
 #        NAME: watch
-# DESCRIPTION: starts nodemon and makes it watch the project and config dirs
+# DESCRIPTION: starts nodemon and makes it watch the application and config dirs
 #==============================================================================
 watch() {
     NODE_ENV=development \
@@ -51,25 +51,25 @@ start() {
 #=== FUNCTION =================================================================
 #        NAME: create
 # DESCRIPTION: copies the samples/base directory as a new, blank, vulpes
-#              project and installs all dependencies
-# PARAMETER 1: project - project name. must be a single word (for npm)
+#              application and installs all dependencies
+# PARAMETER 1: application - application name. must be a single word (for npm)
 #==============================================================================
 create() {
-    local project=$1
+    local application=$1
 
-    if [ -z "$project" ]; then
+    if [ -z "$application" ]; then
         while true;
         do
             echo -n "name: "
-            read project
-            [ ! -z "$project" ] && break
+            read application
+            [ ! -z "$application" ] && break
         done
     fi
 
-    echo "creating $project project"
-    cp -r "$VULPES_HOME/samples/basic/" "$project"
-    cd "$project"
-    sed -i "s/%APP%/$project/" bower.json package.json
+    echo "creating $application application"
+    cp -r "$VULPES_HOME/samples/basic/" "$application"
+    cd "$application"
+    sed -i "s/%APP%/$application/" bower.json package.json
     make
 }
 
