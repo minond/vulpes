@@ -1,15 +1,18 @@
 'use strict';
 
 /* jshint latedef:false */
-
-var DEBUG = process.env.NODE_ENV === 'development';
-
 var express = require('express'),
-    config = require('acm'),
     swig = require('swig'),
     serve_static = require('serve-static'),
     serve_index = require('serve-index'),
-    log = require('debug')('vulpes:app');
+    body_parser = require('body-parser'),
+    page_view = require('pageview'),
+    not_found = require('not-found'),
+    cookie_parser = require('cookie-parser'),
+    error_handler = require('errorhandler');
+
+var log = require('debug')('vulpes:app'),
+    config = require('acm');
 
 var fs = require('fs'),
     join = require('path').join,
@@ -23,9 +26,10 @@ var filter = require('lodash-node/modern/collections/filter'),
  * @function serve_views
  * @param {express} app
  * @param {String} dir base directory
+ * @param {Boolean} debugging
  * @return {express}
  */
-function serve_views(app, dir) {
+function serve_views(app, dir, debugging) {
     var lswig = new swig.Swig();
     app._.swig = lswig;
 
@@ -33,7 +37,7 @@ function serve_views(app, dir) {
     app.set('views', dir + '/assets/views/');
     app.engine('html', lswig.renderFile);
 
-    if (DEBUG) {
+    if (debugging) {
         app.set('view cache', false);
         lswig.options.cache = false;
     }
@@ -47,16 +51,17 @@ function serve_views(app, dir) {
  * @param {express} app
  * @param {String} dir base directory
  * @param {acm} config
+ * @param {Boolean} debugging
  * @return {express} app
  */
-function static_routes(app, dir, config) {
+function static_routes(app, dir, config, debugging) {
     map(config.get('routes.=static'), function (path, url) {
         path = join(dir, path);
 
         log('static route %s (%s)', url, path);
         app.use(url, serve_static(path));
 
-        if (DEBUG) {
+        if (debugging) {
             log('serving index %s (%s)', url, path);
             app.use(url, serve_index(path));
         }
@@ -178,15 +183,31 @@ function run_initializers(app, dir) {
 }
 
 /**
- * builds an app
+ * makes a value available in a request object
+ * @function available_in_request
+ * @param {express} app
+ * @param {*} val
+ * @param {String} label
+ * @return {express}
+ */
+function available_in_request(app, val, label) {
+    app.use(function (req, res, next) {
+        req[ label ] = val;
+        next();
+    });
+}
+
+/**
+ * builds sub-app - call this in `build`
  * @function make
  * @param {express} app
  * @param {String} dir base directory
  * @param {String} base url prefix
  * @param {Object} route definition from app config
+ * @param {Boolean} debugging
  * @return {express}
  */
-function make(app, dir, base, config) {
+function make(app, dir, base, config, debugging) {
     app._ = {
         app: app,
         config: config,
@@ -194,21 +215,70 @@ function make(app, dir, base, config) {
         base: base,
     };
 
-    static_routes(app, dir, config);
-    serve_views(app, dir);
+    available_in_request(app, config, 'config');
+    static_routes(app, dir, config, debugging);
+    serve_views(app, dir, debugging);
     dynamic_routes(app, dir, base, config.get('routes'));
     run_initializers(app, dir);
 
     return app;
 }
 
+/**
+ * builds main-app - this calls `make`
+ * @function build
+ * @param {express} app
+ * @param {String} dir base directory
+ * @param {String} base url prefix
+ * @param {Object} route definition from app config
+ * @param {Boolean} debugging
+ * @return {express}
+ */
+function build(app, dir, base, config, debugging) {
+    app.use(body_parser.urlencoded({ extended: false }));
+    app.use(body_parser.json());
+    app.use(cookie_parser(config.get('application.cookies.secret')));
+
+    available_in_request(app, config, 'global_config');
+    make(app, dir, base, config, debugging);
+
+    app.use(page_view(app.get('views')));
+    app.use(not_found(app.get('views') + '404.html'));
+
+    if (debugging) {
+        error_handler.title = require(process.cwd() + '/package.json').name;
+        app.use(error_handler());
+    }
+}
+
 module.exports = {
-    make: make,
+    available_in_request: available_in_request,
+    build: build,
     dynamic_route_handler: dynamic_route_handler,
     dynamic_route_mount: dynamic_route_mount,
     dynamic_route_serve: dynamic_route_serve,
     dynamic_routes: dynamic_routes,
+    make: make,
     run_initializers: run_initializers,
     serve_views: serve_views,
     static_routes: static_routes,
 };
+// var build = require('./application').build,
+//     join = require('path').join;
+//
+// var express = require('express'),
+//     app = express(),
+//     server = require('http').Server(app),
+//     io = require('socket.io')(server),
+//     config = require('acm');
+//
+// app.use(function (req, res, next) {
+//     req.io = io;
+//     return next();
+// });
+//
+// config.$paths.push(join(__dirname, '..', 'config'));
+// build(app, process.cwd(), '', config, process.env.NODE_ENV === 'development');
+// server.listen(process.env.PORT || 5000);
+
+
