@@ -21,7 +21,7 @@ describe('Builder', function () {
     });
 
     describe('#available_in_request', function () {
-        it('?', function () {
+        it('saves variables on the request object', function () {
             application.available_in_request(app, true, 'hihihi');
 
             map(app._router.stack, function (middleware) {
