@@ -31,8 +31,10 @@ var filter = require('lodash-node/modern/collections/filter'),
  */
 function serve_views(app, dir, debugging) {
     var lswig = new swig.Swig();
-    app._.swig = lswig;
 
+    available_in_application(app, lswig, 'swig');
+
+    app.set('view cache', true);
     app.set('view engine', 'html');
     app.set('views', dir + '/assets/views/');
     app.engine('html', lswig.renderFile);
@@ -195,6 +197,24 @@ function available_in_request(app, val, label) {
         req[ label ] = val;
         next();
     });
+
+    return app;
+}
+
+/**
+ * saves a reference to a vairable in the app object
+ * @param {express} app
+ * @param {*} val
+ * @param {String} label
+ * @return {express}
+ */
+function available_in_application(app, val, label) {
+    if (!app._) {
+        app._ = {};
+    }
+
+    app._[ label ] = val;
+    return app;
 }
 
 /**
@@ -208,12 +228,10 @@ function available_in_request(app, val, label) {
  * @return {express}
  */
 function make(app, dir, base, config, debugging) {
-    app._ = {
-        app: app,
-        config: config,
-        dir: dir,
-        base: base,
-    };
+    available_in_application(app, app, 'app');
+    available_in_application(app, config, 'config');
+    available_in_application(app, dir, 'dir');
+    available_in_application(app, base, 'base');
 
     available_in_request(app, config, 'config');
     static_routes(app, dir, config, debugging);
@@ -252,6 +270,7 @@ function build(app, dir, base, config, debugging) {
 }
 
 module.exports = {
+    available_in_application: available_in_application,
     available_in_request: available_in_request,
     build: build,
     dynamic_route_handler: dynamic_route_handler,
