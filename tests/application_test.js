@@ -49,6 +49,11 @@ describe('Builder', function () {
             expect(app.get('view cache')).to.be(false);
         });
 
+        it('disables swig caching on debug mode', function () {
+            application.serve_views(app, 'hi', true);
+            expect(app._.swig.options.cache).to.be(false);
+        });
+
         it('tracks the swig instance', function () {
             application.serve_views(app);
             expect(app._.swig).to.be.a(swig.Swig);
