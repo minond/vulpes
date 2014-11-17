@@ -134,6 +134,8 @@ function dynamic_route_serve(app, dir, base, route) {
     app.all(base + route.url, function (req, res) {
         res.render(route.serve);
     });
+
+    return app;
 }
 
 /**
@@ -182,6 +184,8 @@ function run_initializers(app, dir) {
             require(file)(app._);
         });
     }
+
+    return app;
 }
 
 /**
@@ -267,6 +271,8 @@ function build(app, dir, base, config, debugging) {
         error_handler.title = require(process.cwd() + '/package.json').name;
         app.use(error_handler());
     }
+
+    return app;
 }
 
 module.exports = {

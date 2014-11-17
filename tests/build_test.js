@@ -9,7 +9,7 @@ describe('Builder', function () {
     var expect = require('expect.js'),
         express = require('express'),
         swig = require('swig'),
-        application = require('../src/application');
+        build = require('../src/build');
 
     beforeEach(function () {
         app = express();
@@ -23,7 +23,7 @@ describe('Builder', function () {
 
     describe('#available_in_request', function () {
         it('saves variables on the request object', function () {
-            application.available_in_request(app, true, 'hihihi');
+            build.available_in_request(app, true, 'hihihi');
 
             map(app._router.stack, function (middleware) {
                 middleware.handle(req, res, noop);
@@ -35,27 +35,27 @@ describe('Builder', function () {
 
     describe('#serve_views', function () {
         it('points the views directory to $BASE/assets/views/', function () {
-            application.serve_views(app, 'hi');
+            build.serve_views(app, 'hi');
             expect(app.get('views')).to.be('hi/assets/views/');
         });
 
         it('caches views', function () {
-            application.serve_views(app, 'hi');
+            build.serve_views(app, 'hi');
             expect(app.get('view cache')).to.be(true);
         });
 
         it('disables view caching on debug mode', function () {
-            application.serve_views(app, 'hi', true);
+            build.serve_views(app, 'hi', true);
             expect(app.get('view cache')).to.be(false);
         });
 
         it('disables swig caching on debug mode', function () {
-            application.serve_views(app, 'hi', true);
+            build.serve_views(app, 'hi', true);
             expect(app._.swig.options.cache).to.be(false);
         });
 
         it('tracks the swig instance', function () {
-            application.serve_views(app);
+            build.serve_views(app);
             expect(app._.swig).to.be.a(swig.Swig);
         });
 
@@ -63,10 +63,15 @@ describe('Builder', function () {
             var app1 = express(),
                 app2 = express();
 
-            application.serve_views(app1);
-            application.serve_views(app2);
+            build.serve_views(app1);
+            build.serve_views(app2);
 
             expect(app1._.swig).to.not.equal(app2._.swig);
         });
     });
+
+    // describe('#static_routes', function () {
+    //     it('', function () {
+    //     });
+    // });
 });
