@@ -19,7 +19,8 @@
     "lodash-node": "~2.4.1",
     "not-found": "~1.0.1",
     "pageview": "0.0.1",
-    "socket.io": "~1.1.0"
+    "socket.io": "~1.1.0",
+    "mongodb": "^1.4.20"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",

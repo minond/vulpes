@@ -12,6 +12,7 @@ var express = require('express'),
     error_handler = require('errorhandler');
 
 var log = require('debug')('vulpes:app'),
+    mongo = require('mongodb').MongoClient,
     config = require('acm');
 
 var fs = require('fs'),
@@ -139,6 +140,62 @@ function dynamic_route_serve(app, dir, base, route) {
 }
 
 /**
+ * @function dynamic_crud_serve
+ * @param {express} app
+ * @param {String} dir base directory
+ * @param {String} base url prefix
+ * @param {Object} route definition from app config
+ * @return {express}
+ */
+function dynamic_crud_serve(app, dir, base, route) {
+    var name = require(dir + '/package.json').name,
+        coll = route.resource,
+        host = app._.config.get('database.host'),
+        port = app._.config.get('database.port');
+
+    app.use(function (req, res, next) {
+        if (app.db) {
+            return next();
+        }
+
+        mongo.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
+            app.db = db;
+            next();
+        });
+    });
+
+    // TODO put
+    // TODO delete
+    app.get(base + route.url, function (req, res, next) {
+        app.db
+            .collection(coll)
+            .find({})
+            .limit(10)
+            .toArray(function (err, docs) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.json(docs);
+                }
+            });
+    });
+
+    app.post(base + route.url, function (req, res, next) {
+        app.db
+            .collection(coll)
+            .insert(req.query, function (err, docs) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.json(docs);
+                }
+            });
+    });
+
+    return app;
+}
+
+/**
  * sets up all configured routes
  * @function dynamic_routes
  * @param {express} app
@@ -156,6 +213,8 @@ function dynamic_routes(app, dir, base, routes) {
             dynamic_route_mount(app, dir, base, route);
         } else if (route.serve) {
             dynamic_route_serve(app, dir, base, route);
+        } else if (route.resource) {
+            dynamic_crud_serve(app, dir, base, route);
         } else {
             dynamic_route_handler(app, dir, base, route);
         }
