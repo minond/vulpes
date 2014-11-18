@@ -164,8 +164,7 @@ function dynamic_crud_serve(app, dir, base, route) {
         });
     });
 
-    // TODO put
-    // TODO delete
+    // XXX http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions
     app.get(base + route.url, function (req, res, next) {
         app.db
             .collection(coll)
@@ -188,6 +187,25 @@ function dynamic_crud_serve(app, dir, base, route) {
                     return next(err);
                 } else {
                     res.json(docs);
+                }
+            });
+    });
+
+    app.put(base + route.url + '/:id', function (req, res, next) {
+        if (req.params.id) {
+            req.params._id = req.params.id;
+            delete req.params.id;
+        }
+
+        app.db
+            .collection(coll)
+            .update(req.params, req.query, function (err, docs) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.json({
+                        success: true
+                    });
                 }
             });
     });
