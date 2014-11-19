@@ -98,7 +98,30 @@ function index(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function create
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function create(app, connection, collection, base_url) {
+    app.post(base_url, function (req, res, next) {
+        connect(connection, collection, function (err, coll) {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            coll.insert(req.query, function (err, docs) {
+                return err ? next(err) : res.json(docs);
+            });
+        });
+    });
+}
+
 module.exports = {
     connection: connection,
+    create: create,
     index: index,
 };

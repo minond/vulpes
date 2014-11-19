@@ -158,8 +158,6 @@ function dynamic_crud_serve(app, dir, base, route) {
         host = app._.config.get('database.host'),
         port = app._.config.get('database.port');
 
-    var connection = crud.connection(host, port, name);
-
     app.use(function (req, res, next) {
         if (collection) {
             return next();
@@ -171,13 +169,9 @@ function dynamic_crud_serve(app, dir, base, route) {
         });
     });
 
+    var connection = crud.connection(host, port, name);
     crud.index(app, connection, coll, base + route.url);
-
-    app.post(base + route.url, function (req, res, next) {
-        collection.insert(req.query, function (err, docs) {
-            return err ? next(err) : res.json(docs);
-        });
-    });
+    crud.create(app, connection, coll, base + route.url);
 
     app.put(base + route.url + '/:id', function (req, res, next) {
         if (req.params.id) {
