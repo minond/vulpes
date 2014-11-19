@@ -12,8 +12,6 @@ var express = require('express'),
     error_handler = require('errorhandler');
 
 var log = require('debug')('vulpes:app'),
-    MongoClient = require('mongodb').MongoClient,
-    ObjectID = require('mongodb').ObjectID,
     config = require('acm');
 
 var fs = require('fs'),
