@@ -149,6 +149,8 @@ function dynamic_route_serve(app, dir, base, route) {
  * @return {express}
  */
 function dynamic_crud_serve(app, dir, base, route) {
+    var collection;
+
     var name = require(dir + '/package.json').name,
         coll = route.resource,
         host = app._.config.get('database.host'),
@@ -161,27 +163,22 @@ function dynamic_crud_serve(app, dir, base, route) {
 
         MongoClient.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
             app.db = db;
+            collection = db.collection(coll);
             next();
         });
     });
 
     // XXX http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions
     app.get(base + route.url, function (req, res, next) {
-        app.db
-            .collection(coll)
-            .find({})
-            .limit(10)
-            .toArray(function (err, docs) {
-                return err ? next(err) : res.json(docs);
-            });
+        collection.find({}).toArray(function (err, docs) {
+            return err ? next(err) : res.json(docs);
+        });
     });
 
     app.post(base + route.url, function (req, res, next) {
-        app.db
-            .collection(coll)
-            .insert(req.query, function (err, docs) {
-                return err ? next(err) : res.json(docs);
-            });
+        collection.insert(req.query, function (err, docs) {
+            return err ? next(err) : res.json(docs);
+        });
     });
 
     app.put(base + route.url + '/:id', function (req, res, next) {
@@ -190,11 +187,9 @@ function dynamic_crud_serve(app, dir, base, route) {
             delete req.params.id;
         }
 
-        app.db
-            .collection(coll)
-            .update(req.params, req.query, function (err, count, stat) {
-                return err ? next(err) : res.json(stat);
-            });
+        collection.update(req.params, req.query, function (err, count, stat) {
+            return err ? next(err) : res.json(stat);
+        });
     });
 
     app.delete(base + route.url + '/:id', function (req, res, next) {
@@ -203,11 +198,9 @@ function dynamic_crud_serve(app, dir, base, route) {
             delete req.params.id;
         }
 
-        app.db
-            .collection(coll)
-            .remove(req.params, function (err, count) {
-                return err ? next(err) : res.json({ ok: true, n: count });
-            });
+        collection.remove(req.params, function (err, count) {
+            return err ? next(err) : res.json({ ok: 1, n: count });
+        });
     });
 
     return app;
