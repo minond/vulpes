@@ -172,11 +172,7 @@ function dynamic_crud_serve(app, dir, base, route) {
             .find({})
             .limit(10)
             .toArray(function (err, docs) {
-                if (err) {
-                    return next(err);
-                } else {
-                    res.json(docs);
-                }
+                return err ? next(err) : res.json(docs);
             });
     });
 
@@ -184,11 +180,7 @@ function dynamic_crud_serve(app, dir, base, route) {
         app.db
             .collection(coll)
             .insert(req.query, function (err, docs) {
-                if (err) {
-                    return next(err);
-                } else {
-                    res.json(docs);
-                }
+                return err ? next(err) : res.json(docs);
             });
     });
 
@@ -200,14 +192,8 @@ function dynamic_crud_serve(app, dir, base, route) {
 
         app.db
             .collection(coll)
-            .update(req.params, req.query, function (err, docs) {
-                if (err) {
-                    return next(err);
-                } else {
-                    res.json({
-                        success: true
-                    });
-                }
+            .update(req.params, req.query, function (err, count, stat) {
+                return err ? next(err) : res.json(stat);
             });
     });
 
