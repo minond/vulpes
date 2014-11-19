@@ -12,7 +12,8 @@ var express = require('express'),
     error_handler = require('errorhandler');
 
 var log = require('debug')('vulpes:app'),
-    mongo = require('mongodb').MongoClient,
+    MongoClient = require('mongodb').MongoClient,
+    ObjectID = require('mongodb').ObjectID,
     config = require('acm');
 
 var fs = require('fs'),
@@ -158,7 +159,7 @@ function dynamic_crud_serve(app, dir, base, route) {
             return next();
         }
 
-        mongo.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
+        MongoClient.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
             app.db = db;
             next();
         });
@@ -193,7 +194,7 @@ function dynamic_crud_serve(app, dir, base, route) {
 
     app.put(base + route.url + '/:id', function (req, res, next) {
         if (req.params.id) {
-            req.params._id = req.params.id;
+            req.params._id = new ObjectID(req.params.id);
             delete req.params.id;
         }
 
