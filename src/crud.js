@@ -133,7 +133,7 @@ function create(app, connection, collection, base_url) {
 }
 
 /**
- * @function create
+ * @function update
  * @param {express} app
  * @param {String} connection identifier
  * @param {String} collection name
@@ -155,9 +155,33 @@ function update(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function destroy
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function destroy(app, connection, collection, base_url) {
+    app.delete(base_url + '/:id', function (req, res, next) {
+        connect(connection, collection, function (err, coll) {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            id_query(req.params);
+            coll.remove(req.params, function (err, count) {
+                return err ? next(err) : res.json({ ok: true, n: count });
+            });
+        });
+    });
+}
+
 module.exports = {
     connection: connection,
     create: create,
+    destroy: destroy,
     index: index,
     update: update,
 };

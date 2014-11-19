@@ -151,39 +151,16 @@ function dynamic_route_serve(app, dir, base, route) {
  * @return {express}
  */
 function dynamic_crud_serve(app, dir, base, route) {
-    var collection;
+    var connection = crud.connection(
+        app._.config.get('database.host'),
+        app._.config.get('database.port'),
+        require(dir + '/package.json').name
+    );
 
-    var name = require(dir + '/package.json').name,
-        coll = route.resource,
-        host = app._.config.get('database.host'),
-        port = app._.config.get('database.port');
-
-    app.use(function (req, res, next) {
-        if (collection) {
-            return next();
-        }
-
-        MongoClient.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
-            collection = db.collection(coll);
-            next();
-        });
-    });
-
-    var connection = crud.connection(host, port, name);
-    crud.index(app, connection, coll, base + route.url);
-    crud.create(app, connection, coll, base + route.url);
-    crud.update(app, connection, coll, base + route.url);
-
-    app.delete(base + route.url + '/:id', function (req, res, next) {
-        if (req.params.id) {
-            req.params._id = new ObjectID(req.params.id);
-            delete req.params.id;
-        }
-
-        collection.remove(req.params, function (err, count) {
-            return err ? next(err) : res.json({ ok: true, n: count });
-        });
-    });
+    crud.index(app, connection, route.resource, base + route.url);
+    crud.create(app, connection, route.resource, base + route.url);
+    crud.update(app, connection, route.resource, base + route.url);
+    crud.destroy(app, connection, route.resource, base + route.url);
 
     return app;
 }
