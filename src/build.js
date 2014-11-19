@@ -172,17 +172,7 @@ function dynamic_crud_serve(app, dir, base, route) {
     var connection = crud.connection(host, port, name);
     crud.index(app, connection, coll, base + route.url);
     crud.create(app, connection, coll, base + route.url);
-
-    app.put(base + route.url + '/:id', function (req, res, next) {
-        if (req.params.id) {
-            req.params._id = new ObjectID(req.params.id);
-            delete req.params.id;
-        }
-
-        collection.update(req.params, req.query, function (err, count, stat) {
-            return err ? next(err) : res.json(stat);
-        });
-    });
+    crud.update(app, connection, coll, base + route.url);
 
     app.delete(base + route.url + '/:id', function (req, res, next) {
         if (req.params.id) {
@@ -191,7 +181,7 @@ function dynamic_crud_serve(app, dir, base, route) {
         }
 
         collection.remove(req.params, function (err, count) {
-            return err ? next(err) : res.json({ ok: 1, n: count });
+            return err ? next(err) : res.json({ ok: true, n: count });
         });
     });
 

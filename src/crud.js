@@ -34,6 +34,18 @@ function identifier(host, port, db) {
 }
 
 /**
+ * makes a query an id friendly query
+ * @function id_query
+ * @param {Object} query
+ */
+function id_query(query) {
+    if (query.id) {
+        query._id = new ObjectID(query.id);
+        delete query.id;
+    }
+}
+
+/**
  * register a new connction
  * @function connection
  * @param {String} host
@@ -120,8 +132,32 @@ function create(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function create
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function update(app, connection, collection, base_url) {
+    app.put(base_url + '/:id', function (req, res, next) {
+        connect(connection, collection, function (err, coll) {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            id_query(req.params);
+            coll.update(req.params, req.query, function (err, count) {
+                return err ? next(err) : res.json({ ok: true, n: count });
+            });
+        });
+    });
+}
+
 module.exports = {
     connection: connection,
     create: create,
     index: index,
+    update: update,
 };
