@@ -197,6 +197,19 @@ function dynamic_crud_serve(app, dir, base, route) {
             });
     });
 
+    app.delete(base + route.url + '/:id', function (req, res, next) {
+        if (req.params.id) {
+            req.params._id = new ObjectID(req.params.id);
+            delete req.params.id;
+        }
+
+        app.db
+            .collection(coll)
+            .remove(req.params, function (err, count) {
+                return err ? next(err) : res.json({ ok: true, n: count });
+            });
+    });
+
     return app;
 }
 
