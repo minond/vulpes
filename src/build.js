@@ -23,6 +23,8 @@ var fs = require('fs'),
 var filter = require('lodash-node/modern/collections/filter'),
     map = require('lodash-node/modern/collections/map');
 
+var crud = require('./crud');
+
 /**
  * sets up view serving informaiton on an app
  * @function serve_views
@@ -156,24 +158,20 @@ function dynamic_crud_serve(app, dir, base, route) {
         host = app._.config.get('database.host'),
         port = app._.config.get('database.port');
 
+    var connection = crud.connection(host, port, name);
+
     app.use(function (req, res, next) {
-        if (app.db) {
+        if (collection) {
             return next();
         }
 
         MongoClient.connect(format('mongodb://%s:%s/%s', host, port, name), function (err, db) {
-            app.db = db;
             collection = db.collection(coll);
             next();
         });
     });
 
-    // XXX http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions
-    app.get(base + route.url, function (req, res, next) {
-        collection.find({}).toArray(function (err, docs) {
-            return err ? next(err) : res.json(docs);
-        });
-    });
+    crud.index(app, connection, coll, base + route.url);
 
     app.post(base + route.url, function (req, res, next) {
         collection.insert(req.query, function (err, docs) {
