@@ -224,12 +224,26 @@ function edit(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function newnew
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function newnew(app, connection, collection, base_url) {
+    app.get(base_url + '/new', function (req, res, next) {
+        res.render(collection + '/new');
+    });
+}
+
 module.exports = {
     connection: connection,
     create: create,
     destroy: destroy,
     edit: edit,
     index: index,
+    newnew: newnew,
     show: show,
     update: update,
 };

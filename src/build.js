@@ -159,6 +159,7 @@ function dynamic_crud_serve(app, dir, base, route) {
     crud.create(app, connection, route.resource, base + route.url);
     crud.update(app, connection, route.resource, base + route.url);
     crud.destroy(app, connection, route.resource, base + route.url);
+    crud.newnew(app, connection, route.resource, base + route.url);
     crud.show(app, connection, route.resource, base + route.url);
     crud.edit(app, connection, route.resource, base + route.url);
 
