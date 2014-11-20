@@ -244,6 +244,7 @@ module.exports = {
     edit: edit,
     index: index,
     newnew: newnew,
+    'new': newnew,
     show: show,
     update: update,
 };

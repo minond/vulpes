@@ -3,6 +3,3 @@
 
 /p/:date/:name:
   handler: blog/controllers/posts.serve
-
-/posts:
-  resource: posts

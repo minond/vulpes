@@ -155,13 +155,29 @@ function dynamic_crud_serve(app, dir, base, route) {
         require(dir + '/package.json').name
     );
 
-    crud.index(app, connection, route.resource, base + route.url);
-    crud.create(app, connection, route.resource, base + route.url);
-    crud.update(app, connection, route.resource, base + route.url);
-    crud.destroy(app, connection, route.resource, base + route.url);
-    crud.newnew(app, connection, route.resource, base + route.url);
-    crud.show(app, connection, route.resource, base + route.url);
-    crud.edit(app, connection, route.resource, base + route.url);
+    function operation(app, connection, collection, base_url, op) {
+        if ((route.operations || [
+            'index',
+            'create',
+            'update',
+            'destroy',
+            'new',
+            'show',
+            'edit',
+        ]).indexOf(op) === -1) {
+            return;
+        }
+
+        crud[ op ](app, connection, collection, base_url);
+    }
+
+    operation(app, connection, route.resource, base + route.url, 'index');
+    operation(app, connection, route.resource, base + route.url, 'create');
+    operation(app, connection, route.resource, base + route.url, 'update');
+    operation(app, connection, route.resource, base + route.url, 'destroy');
+    operation(app, connection, route.resource, base + route.url, 'new');
+    operation(app, connection, route.resource, base + route.url, 'show');
+    operation(app, connection, route.resource, base + route.url, 'edit');
 
     return app;
 }
