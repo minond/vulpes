@@ -232,7 +232,7 @@ function edit(app, connection, collection, base_url) {
  * @param {String} base url
  */
 function newnew(app, connection, collection, base_url) {
-    app.get(base_url + '/new', function (req, res, next) {
+    app.get(base_url + '/new', function (req, res) {
         res.render(collection + '/new');
     });
 }
