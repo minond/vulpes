@@ -1,5 +1,5 @@
--include std.mk
--include js.mk
+-include vendor/minond/scaffold/plugins/std.mk
+-include vendor/minond/scaffold/plugins/js.mk
 
 install:
 	git submodule update --init
