@@ -37,13 +37,15 @@
     "grunt-mkdir": "~0.1.2",
     "grunt-rm": "0.0.4",
     "grunt-spell": "~0.2.1",
-    "istanbul": "~0.3.2",
+    "istanbul": "^0.3.2",
     "json5": "~0.4.0",
     "load-grunt-tasks": "~1.0.0",
     "merge-defaults": "~0.2.1",
-    "mocha": "~2.0.1",
+    "mocha": "^2.0.1",
     "lodash": "~2.4.1",
-    "coveralls": "~2.11.2"
+    "coveralls": "~2.11.2",
+    "complexity-report": "^1.0.6",
+    "jshint": "^2.5.10"
   },
   "bin": {
     "vulpes": "./vulpes"
