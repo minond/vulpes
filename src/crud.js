@@ -30,7 +30,7 @@ function url(connection) {
  * @return {String} identifier
  */
 function identifier(host, port, db) {
-    return [ host, port, db ].join('=+=+=');
+    return [host, port, db].join('=+=+=');
 }
 
 /**
@@ -244,7 +244,7 @@ module.exports = {
     edit: edit,
     index: index,
     newnew: newnew,
-    'new': newnew,
+    new: newnew,
     show: show,
-    update: update,
+    update: update
 };

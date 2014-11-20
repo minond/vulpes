@@ -163,7 +163,7 @@ function dynamic_crud_serve(app, dir, base, route) {
             'destroy',
             'new',
             'show',
-            'edit',
+            'edit'
         ]).indexOf(op) === -1) {
             return;
         }
@@ -332,5 +332,5 @@ module.exports = {
     make: make,
     run_initializers: run_initializers,
     serve_views: serve_views,
-    static_routes: static_routes,
+    static_routes: static_routes
 };

@@ -5,7 +5,7 @@ install:
 	git submodule update --init
 	npm install
 
-lint: js-complexity js-hint
+lint: js-lint
 test-coverage: js-test-coverage
 test: js-test
 travis: lint test-coverage
