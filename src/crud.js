@@ -201,10 +201,34 @@ function show(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function edit
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function edit(app, connection, collection, base_url) {
+    app.get(base_url + '/:id/edit', function (req, res, next) {
+        connect(connection, collection, function (err, coll) {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            id_query(req.params);
+            coll.findOne(req.params, function (err, doc) {
+                return err ? next(err) : res.render(collection + '/edit', { resource: doc });
+            });
+        });
+    });
+}
+
 module.exports = {
     connection: connection,
     create: create,
     destroy: destroy,
+    edit: edit,
     index: index,
     show: show,
     update: update,
