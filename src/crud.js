@@ -178,10 +178,34 @@ function destroy(app, connection, collection, base_url) {
     });
 }
 
+/**
+ * @function show
+ * @param {express} app
+ * @param {String} connection identifier
+ * @param {String} collection name
+ * @param {String} base url
+ */
+function show(app, connection, collection, base_url) {
+    app.get(base_url + '/:id', function (req, res, next) {
+        connect(connection, collection, function (err, coll) {
+            if (err) {
+                next(err);
+                return;
+            }
+
+            id_query(req.params);
+            coll.findOne(req.params, function (err, doc) {
+                return err ? next(err) : res.render(collection + '/show', { resource: doc });
+            });
+        });
+    });
+}
+
 module.exports = {
     connection: connection,
     create: create,
     destroy: destroy,
     index: index,
+    show: show,
     update: update,
 };
