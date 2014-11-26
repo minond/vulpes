@@ -7,6 +7,4 @@ dependencies:
 	git submodule update --init
 
 lint: js-lint
-test-coverage: js-test-coverage
 test: js-test
-travis: lint test-coverage

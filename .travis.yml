@@ -7,8 +7,7 @@ before_script:
   - make install
 
 after_success:
-  - make js-coveralls
-  - make clean
+  - make js-coveralls clean
 
 script:
-  - make travis
+  - make lint js-test-coverage
