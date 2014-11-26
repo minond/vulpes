@@ -1,9 +1,10 @@
--include vendor/minond/scaffold/plugins/std.mk
 -include vendor/minond/scaffold/plugins/js.mk
 
-install:
-	git submodule update --init
+install: dependencies
 	npm install
+
+dependencies:
+	git submodule update --init
 
 lint: js-lint
 test-coverage: js-test-coverage
