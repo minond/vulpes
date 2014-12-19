@@ -7,7 +7,7 @@
 # REQUIREMENTS: node, npm, nodemon
 #==============================================================================
 
-[ -z "$VULPES_HOME" ] && VULPES_HOME=$(dirname "$(readlink -f "$0")")
+[ -z "$VULPES_HOME" ] && VULPES_HOME=$(dirname "$(readlink "$0")")
 
 #=== FUNCTION =================================================================
 #        NAME: usage
