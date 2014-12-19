@@ -19,6 +19,7 @@ var fs = require('fs'),
     format = require('util').format;
 
 var filter = require('lodash-node/modern/collections/filter'),
+    merge = require('lodash-node/modern/objects/merge'),
     map = require('lodash-node/modern/collections/map');
 
 var crud = require('./crud');
@@ -303,6 +304,8 @@ function make(app, dir, base, config, debugging) {
  * @return {express}
  */
 function build(app, dir, base, config, debugging) {
+    config.$user.routes = merge(config.get('routes'), config.get('package.routes'));
+
     app.use(body_parser.urlencoded({ extended: false }));
     app.use(body_parser.json());
     app.use(cookie_parser(config.get('application.cookies.secret')));
