@@ -1,4 +1,4 @@
--include vendor/minond/scaffold/plugins/js.mk
+-include .scaffold/plugins/js.mk
 
 install: dependencies
 	npm install
