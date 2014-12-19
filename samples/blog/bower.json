@@ -1,6 +1,0 @@
-{
-  "name": "vulpes-sample-blog",
-  "dependencies": {
-    "normalize-css": "~3.0.1"
-  }
-}
