@@ -153,7 +153,7 @@ function dynamic_crud_serve(app, dir, base, route) {
     var connection = crud.connection(
         app._.config.get('database.host'),
         app._.config.get('database.port'),
-        require(dir + '/package.json').name
+        app._.config.get('database.name')
     );
 
     function operation(app, connection, collection, base_url, op) {

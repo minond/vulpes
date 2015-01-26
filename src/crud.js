@@ -103,7 +103,7 @@ function index(app, connection, collection, base_url) {
                 return;
             }
 
-            coll.find({}).toArray(function (err, docs) {
+            coll.find(req.query).toArray(function (err, docs) {
                 return err ? next(err) : res.json(docs);
             });
         });
