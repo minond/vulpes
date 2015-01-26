@@ -17,7 +17,7 @@ var MongoClient = require('mongodb').MongoClient,
  * @return {String} connection url
  */
 function url(connection) {
-    var conn = info[ connection ];
+    var conn = info[connection];
     return format('mongodb://%s:%s/%s', conn.host, conn.port, conn.db);
 }
 
@@ -55,7 +55,7 @@ function id_query(query) {
  */
 function connection(host, port, db) {
     var id = identifier(host, port, db);
-    info[ id ] = { host: host, port: port, db: db };
+    info[id] = { host: host, port: port, db: db };
     return id;
 }
 
@@ -70,8 +70,8 @@ function connect(connection, collection, cb) {
     if (connection in pool) {
         cb(
             null,
-            pool[ connection ].collection(collection),
-            pool[ collection ]
+            pool[connection].collection(collection),
+            pool[collection]
         );
     } else if (connection in info) {
         MongoClient.connect(url(connection), function (err, db) {
@@ -80,7 +80,7 @@ function connect(connection, collection, cb) {
                 return;
             }
 
-            pool[ connection ] = db;
+            pool[connection] = db;
             connect(connection, collection, cb);
         });
     } else {

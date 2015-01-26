@@ -119,7 +119,7 @@ function dynamic_route_handler(app, dir, base, route) {
     func = route.handler.split('.').pop();
     handler = route.handler.split('.').shift();
     handler = require(format('%s/app/%s.js', dir, handler));
-    app[ route.method || 'get' ](base + route.url, handler[ func ].bind(handler));
+    app[route.method || 'get'](base + route.url, handler[func].bind(handler));
 
     return app;
 }
@@ -169,7 +169,7 @@ function dynamic_crud_serve(app, dir, base, route) {
             return;
         }
 
-        crud[ op ](app, connection, collection, base_url);
+        crud[op](app, connection, collection, base_url);
     }
 
     operation(app, connection, route.resource, base + route.url, 'index');
@@ -245,7 +245,7 @@ function run_initializers(app, dir) {
  */
 function available_in_request(app, val, label) {
     app.use(function (req, res, next) {
-        req[ label ] = val;
+        req[label] = val;
         next();
     });
 
@@ -264,7 +264,7 @@ function available_in_application(app, val, label) {
         app._ = {};
     }
 
-    app._[ label ] = val;
+    app._[label] = val;
     return app;
 }
 
