@@ -2,11 +2,9 @@
 
 all:: lint test
 
-install: dependencies
-	npm install
-
 dependencies:
 	git submodule update --init
 
+install: dependencies npm-install
 lint: install js-lint
 test: install js-test

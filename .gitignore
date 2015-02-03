@@ -1,6 +1,2 @@
 /node_modules/
-/vendor/
 /build/
-
-/samples/*/node_modules/
-/samples/*/assets/vendor/

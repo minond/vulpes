@@ -6,8 +6,8 @@ node_js:
 before_script:
   - make install
 
-after_success:
-  - make js-coveralls clean
+# after_success:
+#   - make js-coveralls clean
 
 script:
   - make lint js-test-coverage
