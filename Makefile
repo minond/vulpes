@@ -6,5 +6,6 @@ dependencies:
 	git submodule update --init
 
 install: dependencies npm-install
-lint: install js-lint
-test: install js-test
+lint: js-lint
+test: js-test
+test-coverage: js-mocha-coverage
