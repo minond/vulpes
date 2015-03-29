@@ -1,4 +1,5 @@
 -include .scaffold/plugins/js.mk
+-include .scaffold/plugins/es6.mk
 
 all:: lint test
 

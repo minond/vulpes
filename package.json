@@ -8,11 +8,13 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "babel": "^4.7.16",
     "complexity-report": "^1.0.6",
     "coveralls": "^2.11.2",
     "istanbul": "^0.3.2",
     "jscs": "^1.7.3",
     "jshint": "^2.5.10",
-    "mocha": "^2.0.1"
+    "mocha": "^2.0.1",
+    "mocha-traceur": "^2.1.0"
   }
 }
