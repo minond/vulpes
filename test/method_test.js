@@ -1,3 +1,5 @@
+'use strict';
+
 import assert from 'assert';
 import method from '../build/src/method';
 
@@ -24,7 +26,7 @@ describe('method', () => {
     it('only creates one instance of a controller', () => {
         handler = [
             method('test/artifacts/app/blog.cache'),
-            method('test/artifacts/app/blog.cache'),
+            method('test/artifacts/app/blog.cache')
         ];
 
         assert(handler[0]() === handler[1]());

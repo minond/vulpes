@@ -9,8 +9,10 @@
   "dependencies": {},
   "devDependencies": {
     "babel": "^4.7.16",
+    "babel-eslint": "^2.0.2",
     "complexity-report": "^1.0.6",
     "coveralls": "^2.11.2",
+    "eslint": "^0.18.0",
     "istanbul": "^0.3.2",
     "jscs": "^1.7.3",
     "jshint": "^2.5.10",

@@ -1,16 +1,18 @@
+'use strict';
+
 import {join} from 'path';
 
 /**
- * @param {Object} controller
+ * @param {Object} Controller
  * @param {String} method
  * @return {Object}
  */
-function holder(controller, method) {
-    if (!controller.$$instance) {
-        controller.$$instance = new controller;
+function holder(Controller, method) {
+    if (!Controller.$$instance) {
+        Controller.$$instance = new Controller();
     }
 
-    return method in controller ? controller : controller.$$instance;
+    return method in Controller ? Controller : Controller.$$instance;
 }
 
 /**
