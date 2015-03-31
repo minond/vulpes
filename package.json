@@ -2,6 +2,7 @@
   "name": "vulpes",
   "version": "0.0.0",
   "description": "vulpes is a combination of some of my opinions and a lot of node modules made into a webapp bootstrapping tool",
+  "main": "build/src",
   "repository": {
     "type": "git",
     "url": "http://github.com/minond/vulpes"
